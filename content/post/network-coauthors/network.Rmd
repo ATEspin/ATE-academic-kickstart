@@ -23,7 +23,7 @@ library(visNetwork) #Interactive networks
 
 ## Extracting Pubmed information
 
-The *easyPubMed* package can be used for… yes, you guessed write… easily extract information from Pubmed. So, the first thing to do is to search us and extract the list of authors in our papers from the ‘medline’ format, tagged as ‘AU’.
+The *easyPubMed* package can be used for… yes, you guessed right… easily extract information from Pubmed. So, the first thing to do is to search us and extract the list of authors in our papers from the ‘medline’ format, tagged as ‘AU’.
 
 ```{r}
 my_entrez_id <- get_pubmed_ids('Torres-Espin A')

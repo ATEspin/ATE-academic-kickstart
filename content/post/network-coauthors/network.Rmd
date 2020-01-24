@@ -51,7 +51,7 @@ for (i in 1:length(coauthors_list)){
 author_df<-do.call(rbind, author_list)#stack data frames
 ```
 
-The next step is filtering our data frame to keep only the co-authors of our co-authors that are also our co-authors (this is getting tricky…). You could leave the co-authors of your co-authors that you have not publish with, but that can make the graph quite big and not useful for plotting. After filtering we create a new variable with the joint string between co-author and author, so that we can count how many times that joint happens.
+The next step is filtering our data frame to keep only the co-authors of our co-authors that are also our co-authors (this is getting tricky…). You could leave the co-authors of your co-authors that you have not published with, but that can make the graph quite big and not useful for plotting. After filtering we create a new variable with the joint string between co-author and author, so that we can count how many times that joint happens.
 
 ```{r}
 author_df<-author_df[author_df$co_authors%in%author_df$author,]%>%
@@ -61,7 +61,7 @@ author_df<-author_df[author_df$co_authors%in%author_df$author,]%>%
   separate(co_edge, c('co_authors','author'),sep = '_')
 ```
 
-We are ready to create the graph from the data frame. We specify the weight of the edges (using *E*) as the count of the times two authors published together. Note that in our count data ‘author 1-author 2’ counts different than ‘author 2-author 1’ for the same paper, so we are counting each article twice. That is not a problem since we are considering a undirected graph. We just need to remember that we will be representing each article 2 times. I did not care because graphically does not matter. Finally, we plot the graph (very rough!)
+We are ready to create the graph from the data frame. We specify the weight of the edges (using *E*) as the count of the times two authors published together. Note that in our count data ‘author 1-author 2’ counts different than ‘author 2-author 1’ for the same paper, so we are counting each article twice. That is not a problem since we are considering a undirected graph. We just need to remember that we will be representing each article 2 times. I did not care because graphically does not matter. Now, we plot the graph (very rough!)
 
 ```{r}
 author_g<-graph_from_data_frame(author_df,directed = F)

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Locomotion | ATE</title>
+    <link>/tags/locomotion/</link>
+      <atom:link href="/tags/locomotion/index.xml" rel="self" type="application/rss+xml" />
+    <description>Locomotion</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Locomotion</title>
+      <link>/tags/locomotion/</link>
+    </image>
+    
+    <item>
+      <title>Following Spinal Cord Injury Transected Reticulospinal Tract Axons Develop New Collateral Inputs to Spinal Interneurons in Parallel with Locomotor Recovery</title>
+      <link>/publication/may-following-2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-following-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Effects of the Post-Spinal Cord Injury Microenvironment on the Differentiation Capacity of Human Neural Stem Cells Derived from Induced Pluripotent Stem Cells</title>
+      <link>/publication/lopez-serrano-effects-2016/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/lopez-serrano-effects-2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Quantitative assessment of locomotion and interlimb coordination in rats after different spinal cord injuries</title>
+      <link>/publication/redondo-castro-quantitative-2013/</link>
+      <pubDate>Fri, 01 Mar 2013 00:00:00 +0000</pubDate>
+      <guid>/publication/redondo-castro-quantitative-2013/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.7.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Abel Torres Espin">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="This post will show you how you can extract and visualize your network of co-authors. You can also find the code for this post on GitHub.
+Luckily for us, the hard work needed for this has been already programmed by amazing people out there, so we will be using these packages:
+library(easyPubMed) #API connexion with pubmedlibrary(tidyverse) #To facilitate some data wranglinglibrary(igraph) #To build the graphlibrary(visNetwork) #Interactive networksExtracting Pubmed informationThe easyPubMed package can be used for… yes, you guessed write… easily extract information from Pubmed.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/network/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="/post/network/">
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="og:site_name" content="ATE">
+  <meta property="og:url" content="/post/network/">
+  <meta property="og:title" content="network of co-authors | ATE">
+  <meta property="og:description" content="This post will show you how you can extract and visualize your network of co-authors. You can also find the code for this post on GitHub.
+Luckily for us, the hard work needed for this has been already programmed by amazing people out there, so we will be using these packages:
+library(easyPubMed) #API connexion with pubmedlibrary(tidyverse) #To facilitate some data wranglinglibrary(igraph) #To build the graphlibrary(visNetwork) #Interactive networksExtracting Pubmed informationThe easyPubMed package can be used for… yes, you guessed write… easily extract information from Pubmed."><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
+  <meta property="twitter:image" content="img/map[gravatar:%!s(bool=false) shape:circle]"><meta property="og:locale" content="en-us">
+  
+    
+    
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/network/"
+  },
+  "headline": "network of co-authors",
+  
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Abel Torres Espin"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "ATE",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "img//"
+    }
+  },
+  "description": "This post will show you how you can extract and visualize your network of co-authors. You can also find the code for this post on GitHub.\nLuckily for us, the hard work needed for this has been already programmed by amazing people out there, so we will be using these packages:\nlibrary(easyPubMed) #API connexion with pubmed\rlibrary(tidyverse) #To facilitate some data wrangling\rlibrary(igraph) #To build the graph\rlibrary(visNetwork) #Interactive networks\rExtracting Pubmed information\rThe easyPubMed package can be used for… yes, you guessed write… easily extract information from Pubmed."
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>network of co-authors | ATE</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#publications2"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#coauthors"><span>Co-authors</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#my%20research"><span>My research</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/content/network.Rmd"><span>test</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#tools"><span>Tools</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>network of co-authors</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Jan 1, 0001
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    10 min read
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<link href="/rmarkdown-libs/vis/vis.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/vis/vis.min.js"></script>
+<script src="/rmarkdown-libs/visNetwork-binding/visNetwork.js"></script>
+
+
+<p>This post will show you how you can extract and visualize your network of co-authors. You can also find the code for this post on GitHub.</p>
+<p>Luckily for us, the hard work needed for this has been already programmed by amazing people out there, so we will be using these packages:</p>
+<pre class="r"><code>library(easyPubMed) #API connexion with pubmed
+library(tidyverse) #To facilitate some data wrangling
+library(igraph) #To build the graph
+library(visNetwork) #Interactive networks</code></pre>
+<div id="extracting-pubmed-information" class="section level2">
+<h2>Extracting Pubmed information</h2>
+<p>The <em>easyPubMed</em> package can be used for… yes, you guessed write… easily extract information from Pubmed. So, the first thing to do is to search us and extract the list of authors in our papers from the ‘medline’ format, tagged as ‘AU’.</p>
+<pre class="r"><code>my_entrez_id &lt;- get_pubmed_ids(&#39;Torres-Espin A&#39;)
+my_author_txt &lt;- fetch_pubmed_data(my_entrez_id, format = &quot;medline&quot;)
+authors&lt;-my_author_txt[str_detect(my_author_txt, &quot;^AU &quot;)]
+coauthors_list&lt;-unique(str_remove_all(authors, &#39;^AU  - &#39;))
+head(coauthors_list)</code></pre>
+<pre><code>## [1] &quot;Schmidt EKA&quot;    &quot;Torres-Espin A&quot; &quot;Raposo PJF&quot;     &quot;Madsen KL&quot;     
+## [5] &quot;Kigerl KA&quot;      &quot;Popovich PG&quot;</code></pre>
+<p>Note that we use <strong>unique</strong> because we might have more than one paper with the same author. We do this because now we are going to search the list of co-authors to get the relationship of publication between them. If you only want to get the first level connections of each co-author with you, then do not need to collapse the <strong>coauthors_list</strong>.</p>
+<p>Now let’s create a data frame containing the list of co-authors for each author on our list of co-authors. We can do that by iterating through the same code we did before and saving the results in a list of data frames. We will stack the list of data frames at the end by calling <strong>rbind</strong>. If you know some R you probably know that this code can be collapsed in fewer lines and be more efficient using <strong>apply</strong>. I like using loops from time to time!</p>
+<pre class="r"><code>author_list&lt;-list()#define the list to save the data frames
+
+for (i in 1:length(coauthors_list)){
+  my_entrez_id &lt;- get_pubmed_ids(coauthors_list[i])
+  my_author_txt &lt;- fetch_pubmed_data(my_entrez_id, format = &quot;medline&quot;)
+  authors&lt;-my_author_txt[str_detect(my_author_txt, &quot;^AU &quot;)]
+  authors&lt;-str_remove_all(authors, &#39;^AU  - &#39;)
+  author_list[[i]]&lt;-data.frame(co_authors=authors, author=coauthors_list[i])
+}
+author_df&lt;-do.call(rbind, author_list)#stack data frames</code></pre>
+<p>The next step is filtering our data frame to keep only the co-authors of our co-authors that are also our co-authors (this is getting tricky…). You could leave the co-authors of your co-authors that you have not publish with, but that can make the graph quite big and not useful for plotting. After filtering we create a new variable with the joint string between co-author and author, so that we can count how many times that joint happens.</p>
+<pre class="r"><code>author_df&lt;-author_df[author_df$co_authors%in%author_df$author,]%&gt;%
+  mutate(co_edge=paste(co_authors, author, sep = &#39;_&#39;))%&gt;%
+  group_by(co_edge)%&gt;%
+  summarise(count=n())%&gt;%
+  separate(co_edge, c(&#39;co_authors&#39;,&#39;author&#39;),sep = &#39;_&#39;)</code></pre>
+<p>We are ready to create the graph from the data frame. We specify the weight of the edges (using <em>E</em>) as the count of the times two authors published together. Note that in our count data ‘author 1-author 2’ counts different than ‘author 2-author 1’ for the same paper, so we are counting each article twice. That is not a problem since we are considering a undirected graph. We just need to remember that we will be representing each article 2 times. I did not care because graphically does not matter. Finally, we plot the graph (very rough!)</p>
+<pre class="r"><code>author_g&lt;-graph_from_data_frame(author_df,directed = F)
+E(author_g)$weight&lt;-author_df$count
+author_g&lt;-simplify(author_g)
+plot(author_g,edge.width = E(author_g)$weight)</code></pre>
+<p><img src="/network_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Last step is to make the graph pretty and play with the parameters. I find <strong>visNetwork</strong> package an amazing tool, so I recommend you explore it if you use networks.</p>
+<pre class="r"><code>vis_g&lt;-toVisNetworkData(author_g) #coverts the igraph object to visNetwork
+vis_g$edges$value&lt;-vis_g$edges$weight #specify the values for eadges as the weights (number of papers for pairs)
+
+#vis_g$nodes$title&lt;-co_authors_abel$author_name #name of the nodes
+
+#plot the network  
+visNetwork(nodes = vis_g$nodes, edges = vis_g$edges, height = &quot;300px&quot;, width = &#39;300px&#39;)%&gt;%
+  visNodes(size = 10, shape=&#39;cicle&#39;, mass=2,font=list(color=&#39;white&#39;),fixed = F) %&gt;%
+  visEdges(length = 10,physics = T, smooth = list(enabled=T))%&gt;%
+  visLayout(randomSeed = 666)%&gt;%
+  visOptions(highlightNearest = list(hover = T), 
+             nodesIdSelection = list(enabled = TRUE))%&gt;%
+  visPhysics(stabilization = T, minVelocity = 10, maxVelocity = 25)</code></pre>
+<div id="htmlwidget-1" style="width:300px;height:300px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"nodes":{"id":["Allodi I","Alvarez-Palomo AB","Arbat-Plana A","Auladell C","Batty NJ","Beaudry E","Bennett DJ","Biernaskie J","Bixby JL","Bufler P","Callahan A","Carulla P","Coll-Miro M","Corona-Quintanilla DL","Dahlby J","del Rio JA","del Valle J","Dinarello CA","Duque D","Edel MJ","Fenrich K","Fenrich KK","Ferguson AR","Forero J","Fores J","Fouad K","Francos-Quijorna I","Fuhrmann T","Garcia-Alias G","Gasull X","Gavin R","Gonzalez-Perez F","Gonzalez F","Grethe JS","Hernandez J","Jakeman LB","Junyent F","Kigerl KA","Krajacic A","Lemmon VP","Lopez-Serrano C","Lopez-Vales R","Lucas-Osma AM","Madsen KL","Magnuson DSK","Martone ME","Matamoros-Angles A","May Z","Moreno-Flores MT","Navarro X","Nielson JL","Nocentini S","Popovich PG","Raposo P","Raposo PJF","Redondo-Castro E","Reginensi D","Requena J","Romero R","Samitier J","Santos-Nogueira E","Santos D","Schmidt E","Schmidt EKA","Schwab JM","Seira O","Serra-Picamal X","Shoichet M","Stykel MG","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Trepat X","Udina E","Utrera J","Vallejo C","Vavrek R","Wandosell F"],"label":["Allodi I","Alvarez-Palomo AB","Arbat-Plana A","Auladell C","Batty NJ","Beaudry E","Bennett DJ","Biernaskie J","Bixby JL","Bufler P","Callahan A","Carulla P","Coll-Miro M","Corona-Quintanilla DL","Dahlby J","del Rio JA","del Valle J","Dinarello CA","Duque D","Edel MJ","Fenrich K","Fenrich KK","Ferguson AR","Forero J","Fores J","Fouad K","Francos-Quijorna I","Fuhrmann T","Garcia-Alias G","Gasull X","Gavin R","Gonzalez-Perez F","Gonzalez F","Grethe JS","Hernandez J","Jakeman LB","Junyent F","Kigerl KA","Krajacic A","Lemmon VP","Lopez-Serrano C","Lopez-Vales R","Lucas-Osma AM","Madsen KL","Magnuson DSK","Martone ME","Matamoros-Angles A","May Z","Moreno-Flores MT","Navarro X","Nielson JL","Nocentini S","Popovich PG","Raposo P","Raposo PJF","Redondo-Castro E","Reginensi D","Requena J","Romero R","Samitier J","Santos-Nogueira E","Santos D","Schmidt E","Schmidt EKA","Schwab JM","Seira O","Serra-Picamal X","Shoichet M","Stykel MG","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Trepat X","Udina E","Utrera J","Vallejo C","Vavrek R","Wandosell F"]},"edges":{"from":["Allodi I","Allodi I","Allodi I","Allodi I","Allodi I","Allodi I","Allodi I","Allodi I","Allodi I","Alvarez-Palomo AB","Alvarez-Palomo AB","Alvarez-Palomo AB","Alvarez-Palomo AB","Alvarez-Palomo AB","Alvarez-Palomo AB","Alvarez-Palomo AB","Arbat-Plana A","Arbat-Plana A","Arbat-Plana A","Auladell C","Auladell C","Auladell C","Auladell C","Auladell C","Auladell C","Auladell C","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Batty NJ","Beaudry E","Beaudry E","Beaudry E","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Bennett DJ","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Biernaskie J","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bixby JL","Bufler P","Bufler P","Bufler P","Bufler P","Bufler P","Bufler P","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Callahan A","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Carulla P","Coll-Miro M","Coll-Miro M","Coll-Miro M","Coll-Miro M","Coll-Miro M","Coll-Miro M","Corona-Quintanilla DL","Corona-Quintanilla DL","Corona-Quintanilla DL","Corona-Quintanilla DL","Corona-Quintanilla DL","Dahlby J","Dahlby J","Dahlby J","Dahlby J","Dahlby J","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Rio JA","del Valle J","del Valle J","del Valle J","del Valle J","del Valle J","del Valle J","del Valle J","del Valle J","Dinarello CA","Dinarello CA","Dinarello CA","Dinarello CA","Dinarello CA","Duque D","Duque D","Duque D","Duque D","Duque D","Edel MJ","Edel MJ","Edel MJ","Edel MJ","Edel MJ","Edel MJ","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich K","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Fenrich KK","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Ferguson AR","Forero J","Forero J","Forero J","Forero J","Forero J","Forero J","Forero J","Forero J","Forero J","Forero J","Forero J","Forero J","Fores J","Fores J","Fores J","Fores J","Fores J","Fores J","Fores J","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Fouad K","Francos-Quijorna I","Francos-Quijorna I","Francos-Quijorna I","Francos-Quijorna I","Francos-Quijorna I","Francos-Quijorna I","Fuhrmann T","Fuhrmann T","Fuhrmann T","Fuhrmann T","Fuhrmann T","Fuhrmann T","Fuhrmann T","Garcia-Alias G","Garcia-Alias G","Garcia-Alias G","Garcia-Alias G","Garcia-Alias G","Garcia-Alias G","Gasull X","Gasull X","Gasull X","Gasull X","Gasull X","Gavin R","Gavin R","Gavin R","Gavin R","Gavin R","Gavin R","Gavin R","Gavin R","Gavin R","Gavin R","Gavin R","Gavin R","Gonzalez-Perez F","Gonzalez-Perez F","Gonzalez-Perez F","Gonzalez-Perez F","Gonzalez-Perez F","Gonzalez-Perez F","Gonzalez F","Gonzalez F","Gonzalez F","Gonzalez F","Grethe JS","Grethe JS","Grethe JS","Grethe JS","Grethe JS","Grethe JS","Grethe JS","Grethe JS","Grethe JS","Hernandez J","Hernandez J","Hernandez J","Hernandez J","Hernandez J","Hernandez J","Hernandez J","Hernandez J","Jakeman LB","Jakeman LB","Jakeman LB","Jakeman LB","Jakeman LB","Jakeman LB","Jakeman LB","Jakeman LB","Jakeman LB","Jakeman LB","Junyent F","Junyent F","Junyent F","Junyent F","Kigerl KA","Kigerl KA","Kigerl KA","Kigerl KA","Kigerl KA","Kigerl KA","Kigerl KA","Krajacic A","Krajacic A","Krajacic A","Krajacic A","Krajacic A","Krajacic A","Krajacic A","Lemmon VP","Lemmon VP","Lemmon VP","Lemmon VP","Lemmon VP","Lemmon VP","Lemmon VP","Lemmon VP","Lemmon VP","Lopez-Serrano C","Lopez-Serrano C","Lopez-Serrano C","Lopez-Serrano C","Lopez-Serrano C","Lopez-Vales R","Lopez-Vales R","Lopez-Vales R","Lopez-Vales R","Lopez-Vales R","Lucas-Osma AM","Lucas-Osma AM","Lucas-Osma AM","Lucas-Osma AM","Lucas-Osma AM","Lucas-Osma AM","Lucas-Osma AM","Lucas-Osma AM","Madsen KL","Madsen KL","Madsen KL","Madsen KL","Madsen KL","Madsen KL","Magnuson DSK","Magnuson DSK","Magnuson DSK","Magnuson DSK","Magnuson DSK","Magnuson DSK","Magnuson DSK","Martone ME","Martone ME","Martone ME","Martone ME","Martone ME","Matamoros-Angles A","Matamoros-Angles A","Matamoros-Angles A","Matamoros-Angles A","Matamoros-Angles A","Matamoros-Angles A","Matamoros-Angles A","Matamoros-Angles A","Matamoros-Angles A","Matamoros-Angles A","May Z","May Z","May Z","May Z","May Z","Moreno-Flores MT","Moreno-Flores MT","Moreno-Flores MT","Moreno-Flores MT","Moreno-Flores MT","Moreno-Flores MT","Moreno-Flores MT","Moreno-Flores MT","Moreno-Flores MT","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Navarro X","Nielson JL","Nielson JL","Nielson JL","Nielson JL","Nielson JL","Nocentini S","Nocentini S","Nocentini S","Nocentini S","Nocentini S","Nocentini S","Nocentini S","Popovich PG","Popovich PG","Popovich PG","Popovich PG","Popovich PG","Popovich PG","Popovich PG","Popovich PG","Raposo P","Raposo P","Raposo P","Raposo P","Raposo P","Raposo P","Raposo P","Raposo PJF","Raposo PJF","Raposo PJF","Redondo-Castro E","Redondo-Castro E","Redondo-Castro E","Redondo-Castro E","Redondo-Castro E","Reginensi D","Reginensi D","Reginensi D","Reginensi D","Reginensi D","Reginensi D","Requena J","Romero R","Romero R","Romero R","Samitier J","Samitier J","Samitier J","Samitier J","Samitier J","Santos-Nogueira E","Santos-Nogueira E","Santos-Nogueira E","Santos D","Santos D","Schmidt E","Schmidt E","Schmidt E","Schmidt EKA","Schwab JM","Schwab JM","Schwab JM","Seira O","Seira O","Seira O","Seira O","Seira O","Serra-Picamal X","Serra-Picamal X","Serra-Picamal X","Shoichet M","Shoichet M","Shoichet M","Stykel MG","Taylor-Burds C","Taylor-Burds C","Tetzlaff W","Tetzlaff W","Torres-Espin A","Torres-Espin A","Torres-Espin A","Torres-Espin A","Torres-Espin A","Torres-Espin A","Trepat X"],"to":["Corona-Quintanilla DL","Fores J","Gonzalez-Perez F","Gonzalez F","Hernandez J","Navarro X","Santos-Nogueira E","Torres-Espin A","Udina E","Edel MJ","Gasull X","Hernandez J","Lopez-Serrano C","Navarro X","Requena J","Torres-Espin A","Navarro X","Torres-Espin A","Udina E","del Rio JA","Duque D","Junyent F","Redondo-Castro E","Romero R","Torres-Espin A","Utrera J","Biernaskie J","Dahlby J","Fenrich K","Fenrich KK","Fouad K","Fuhrmann T","Lucas-Osma AM","May Z","Raposo P","Shoichet M","Stykel MG","Torres-Espin A","Vavrek R","Fenrich K","Fouad K","Torres-Espin A","Fenrich K","Fenrich KK","Forero J","Fouad K","Krajacic A","Lucas-Osma AM","May Z","Popovich PG","Raposo P","Schmidt E","Tetzlaff W","Torres-Espin A","Vavrek R","Fenrich K","Fenrich KK","Forero J","Fouad K","Fuhrmann T","Lucas-Osma AM","May Z","Raposo P","Shoichet M","Stykel MG","Tetzlaff W","Torres-Espin A","Callahan A","del Rio JA","Ferguson AR","Fouad K","Grethe JS","Jakeman LB","Lemmon VP","Magnuson DSK","Martone ME","Matamoros-Angles A","Nielson JL","Popovich PG","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Coll-Miro M","Dinarello CA","Francos-Quijorna I","Lopez-Vales R","Santos-Nogueira E","Torres-Espin A","Ferguson AR","Fouad K","Grethe JS","Jakeman LB","Lemmon VP","Magnuson DSK","Martone ME","Nielson JL","Popovich PG","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","del Rio JA","Gavin R","Matamoros-Angles A","Moreno-Flores MT","Navarro X","Nocentini S","Reginensi D","Samitier J","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Wandosell F","Dinarello CA","Francos-Quijorna I","Lopez-Serrano C","Lopez-Vales R","Santos-Nogueira E","Torres-Espin A","Fores J","Gonzalez F","Navarro X","Torres-Espin A","Udina E","Fenrich K","Fenrich KK","Fouad K","May Z","Torres-Espin A","Gavin R","Lemmon VP","Matamoros-Angles A","Moreno-Flores MT","Navarro X","Nocentini S","Reginensi D","Samitier J","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Wandosell F","Gonzalez-Perez F","Gonzalez F","Junyent F","Navarro X","Requena J","Santos D","Torres-Espin A","Udina E","Fouad K","Francos-Quijorna I","Lopez-Vales R","Santos-Nogueira E","Torres-Espin A","Junyent F","Redondo-Castro E","Romero R","Torres-Espin A","Utrera J","Gasull X","Hernandez J","Lopez-Serrano C","Navarro X","Requena J","Torres-Espin A","Fenrich KK","Forero J","Fouad K","Fuhrmann T","Kigerl KA","Krajacic A","Lucas-Osma AM","Madsen KL","May Z","Popovich PG","Raposo P","Raposo PJF","Schmidt E","Schmidt EKA","Shoichet M","Stykel MG","Tetzlaff W","Torres-Espin A","Vavrek R","Forero J","Fouad K","Fuhrmann T","Kigerl KA","Krajacic A","Lucas-Osma AM","Madsen KL","May Z","Popovich PG","Raposo P","Raposo PJF","Schmidt E","Schmidt EKA","Shoichet M","Stykel MG","Torres-Espin A","Vavrek R","Fouad K","Grethe JS","Jakeman LB","Lemmon VP","Magnuson DSK","Martone ME","Nielson JL","Popovich PG","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Fouad K","Krajacic A","Lucas-Osma AM","May Z","Popovich PG","Raposo P","Schmidt E","Schmidt EKA","Shoichet M","Tetzlaff W","Torres-Espin A","Vavrek R","Garcia-Alias G","Gonzalez-Perez F","Gonzalez F","Lopez-Vales R","Navarro X","Torres-Espin A","Udina E","Fuhrmann T","Grethe JS","Jakeman LB","Kigerl KA","Krajacic A","Lemmon VP","Lucas-Osma AM","Madsen KL","Magnuson DSK","Martone ME","May Z","Nielson JL","Popovich PG","Raposo P","Raposo PJF","Schmidt E","Schmidt EKA","Schwab JM","Shoichet M","Stykel MG","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Udina E","Vavrek R","Lopez-Serrano C","Lopez-Vales R","Navarro X","Santos-Nogueira E","Schwab JM","Torres-Espin A","Lucas-Osma AM","May Z","Raposo P","Schmidt E","Shoichet M","Stykel MG","Torres-Espin A","Lopez-Vales R","Navarro X","Redondo-Castro E","Torres-Espin A","Udina E","Vallejo C","Hernandez J","Lopez-Serrano C","Navarro X","Requena J","Torres-Espin A","Matamoros-Angles A","Moreno-Flores MT","Navarro X","Nocentini S","Reginensi D","Requena J","Samitier J","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Wandosell F","Hernandez J","Navarro X","Santos-Nogueira E","Santos D","Torres-Espin A","Udina E","Navarro X","Romero R","Torres-Espin A","Udina E","Jakeman LB","Lemmon VP","Magnuson DSK","Martone ME","Nielson JL","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Lopez-Serrano C","Lopez-Vales R","Navarro X","Redondo-Castro E","Requena J","Santos-Nogueira E","Torres-Espin A","Udina E","Kigerl KA","Lemmon VP","Magnuson DSK","Martone ME","Nielson JL","Popovich PG","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Redondo-Castro E","Romero R","Torres-Espin A","Utrera J","Madsen KL","Popovich PG","Raposo P","Raposo PJF","Schmidt E","Schmidt EKA","Torres-Espin A","Lucas-Osma AM","Popovich PG","Raposo P","Schmidt E","Tetzlaff W","Torres-Espin A","Vavrek R","Magnuson DSK","Martone ME","Matamoros-Angles A","Nielson JL","Popovich PG","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Lopez-Vales R","Navarro X","Requena J","Santos-Nogueira E","Torres-Espin A","Navarro X","Santos-Nogueira E","Schwab JM","Torres-Espin A","Udina E","May Z","Popovich PG","Raposo P","Schmidt E","Shoichet M","Stykel MG","Torres-Espin A","Vavrek R","Popovich PG","Raposo P","Raposo PJF","Schmidt E","Schmidt EKA","Torres-Espin A","Martone ME","May Z","Nielson JL","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Nielson JL","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Moreno-Flores MT","Navarro X","Nocentini S","Reginensi D","Samitier J","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Wandosell F","Raposo P","Shoichet M","Stykel MG","Tetzlaff W","Torres-Espin A","Navarro X","Nocentini S","Reginensi D","Samitier J","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Wandosell F","Nocentini S","Redondo-Castro E","Reginensi D","Requena J","Samitier J","Santos-Nogueira E","Santos D","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Udina E","Vallejo C","Wandosell F","Popovich PG","Schwab JM","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Reginensi D","Samitier J","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Wandosell F","Raposo P","Raposo PJF","Schmidt E","Schmidt EKA","Schwab JM","Tetzlaff W","Torres-Espin A","Vavrek R","Raposo PJF","Schmidt E","Schmidt EKA","Shoichet M","Stykel MG","Torres-Espin A","Vavrek R","Schmidt E","Schmidt EKA","Torres-Espin A","Romero R","Santos-Nogueira E","Torres-Espin A","Udina E","Utrera J","Samitier J","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Wandosell F","Torres-Espin A","Schmidt E","Torres-Espin A","Utrera J","Seira O","Serra-Picamal X","Torres-Espin A","Trepat X","Wandosell F","Schwab JM","Torres-Espin A","Udina E","Torres-Espin A","Udina E","Schmidt EKA","Torres-Espin A","Vavrek R","Torres-Espin A","Taylor-Burds C","Tetzlaff W","Torres-Espin A","Serra-Picamal X","Tetzlaff W","Torres-Espin A","Trepat X","Wandosell F","Torres-Espin A","Trepat X","Wandosell F","Stykel MG","Tetzlaff W","Torres-Espin A","Torres-Espin A","Tetzlaff W","Torres-Espin A","Torres-Espin A","Vavrek R","Trepat X","Udina E","Utrera J","Vallejo C","Vavrek R","Wandosell F","Wandosell F"],"weight":[2,2,4,1,1,14,2,2,14,8,2,1,2,2,7,2,10,2,10,7,4,52,2,12,2,18,2,2,3,6,8,2,2,4,4,2,2,6,2,2,2,2,7,14,4,30,2,10,6,2,2,2,2,4,12,3,2,2,6,2,2,6,2,4,12,12,2,7,3,8,4,2,4,102,2,2,2,4,8,5,2,2,2,2,50,2,4,2,2,7,4,2,4,7,2,2,4,5,4,2,2,2,9,6,4,4,2,4,4,2,2,2,2,4,4,2,4,2,4,4,2,2,1,2,2,2,1,2,2,2,2,40,1,6,4,2,9,6,5,6,2,2,4,9,4,1,1,21,1,7,2,1,2,2,6,2,2,4,2,2,2,4,2,1,2,2,12,2,27,7,19,1,1,1,6,1,6,2,2,1,1,2,2,1,2,8,2,6,26,2,2,2,12,2,8,4,5,2,4,4,2,2,12,4,4,2,8,8,2,4,34,8,7,2,6,2,14,2,2,4,2,2,3,2,1,2,6,2,20,2,1,24,48,2,4,2,2,4,2,10,4,12,2,4,2,20,4,6,7,2,4,4,4,4,2,2,20,18,2,28,2,14,8,8,2,2,2,2,2,2,8,2,2,18,28,6,4,2,2,1,2,2,2,2,6,2,2,2,2,3,6,4,2,2,2,8,2,26,2,5,2,18,1,1,1,1,2,2,2,42,2,2,2,2,2,2,1,9,3,1,1,5,3,2,4,2,2,4,16,8,2,4,2,2,10,2,18,2,40,1,2,1,2,2,2,2,2,2,4,2,2,2,2,2,4,8,5,2,2,2,4,2,2,4,2,34,10,2,2,2,2,2,4,2,2,2,4,4,2,1,2,1,2,2,2,2,2,2,2,2,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,4,6,2,4,4,2,2,2,2,4,36,2,18,2,2,2,10,13,2,2,22,2,92,4,2,4,4,2,2,2,6,2,2,2,2,4,4,3,2,3,2,5,2,4,2,1,2,1,2,2,7,4,1,2,2,1,1,8,1,2,2,2,2,2,4,4,2,1,1,8,2,2,2,2,2,2,2,2,1,2,3,4,2,4,2,4,2,2,2,2,2,2,2,22,2,2,2,2,2,2,2,2,4,2,4,2,2,4,2,4],"value":[2,2,4,1,1,14,2,2,14,8,2,1,2,2,7,2,10,2,10,7,4,52,2,12,2,18,2,2,3,6,8,2,2,4,4,2,2,6,2,2,2,2,7,14,4,30,2,10,6,2,2,2,2,4,12,3,2,2,6,2,2,6,2,4,12,12,2,7,3,8,4,2,4,102,2,2,2,4,8,5,2,2,2,2,50,2,4,2,2,7,4,2,4,7,2,2,4,5,4,2,2,2,9,6,4,4,2,4,4,2,2,2,2,4,4,2,4,2,4,4,2,2,1,2,2,2,1,2,2,2,2,40,1,6,4,2,9,6,5,6,2,2,4,9,4,1,1,21,1,7,2,1,2,2,6,2,2,4,2,2,2,4,2,1,2,2,12,2,27,7,19,1,1,1,6,1,6,2,2,1,1,2,2,1,2,8,2,6,26,2,2,2,12,2,8,4,5,2,4,4,2,2,12,4,4,2,8,8,2,4,34,8,7,2,6,2,14,2,2,4,2,2,3,2,1,2,6,2,20,2,1,24,48,2,4,2,2,4,2,10,4,12,2,4,2,20,4,6,7,2,4,4,4,4,2,2,20,18,2,28,2,14,8,8,2,2,2,2,2,2,8,2,2,18,28,6,4,2,2,1,2,2,2,2,6,2,2,2,2,3,6,4,2,2,2,8,2,26,2,5,2,18,1,1,1,1,2,2,2,42,2,2,2,2,2,2,1,9,3,1,1,5,3,2,4,2,2,4,16,8,2,4,2,2,10,2,18,2,40,1,2,1,2,2,2,2,2,2,4,2,2,2,2,2,4,8,5,2,2,2,4,2,2,4,2,34,10,2,2,2,2,2,4,2,2,2,4,4,2,1,2,1,2,2,2,2,2,2,2,2,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,4,6,2,4,4,2,2,2,2,4,36,2,18,2,2,2,10,13,2,2,22,2,92,4,2,4,4,2,2,2,6,2,2,2,2,4,4,3,2,3,2,5,2,4,2,1,2,1,2,2,7,4,1,2,2,1,1,8,1,2,2,2,2,2,4,4,2,1,1,8,2,2,2,2,2,2,2,2,1,2,3,4,2,4,2,4,2,2,2,2,2,2,2,22,2,2,2,2,2,2,2,2,4,2,4,2,2,4,2,4]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"cicle","size":10,"mass":2,"fixed":false,"font":{"color":"white"}},"manipulation":{"enabled":false},"edges":{"length":10,"physics":true,"smooth":{"enabled":true}},"layout":{"randomSeed":666},"interaction":{"hover":true},"physics":{"maxVelocity":25,"minVelocity":10,"stabilization":true}},"groups":null,"width":"300px","height":"300px","idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)"},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);","highlight":{"enabled":false,"hoverNearest":true,"degree":1,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"}},"evals":[],"jsHooks":[]}</script>
+<p>DONE!</p>
+<p>Now you can save the network as html using the <em>visSave</em> function. For the network in my <a href="https://atespin.github.io/">webside</a>, I did some extra processing steps to consider that some times same author might publish with slightly different names. I also added some groups and colors. I would let you be creative.</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/post/network/&amp;text=network%20of%20co-authors" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/post/network/&amp;t=network%20of%20co-authors" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=network%20of%20co-authors&amp;body=/post/network/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/post/network/&amp;title=network%20of%20co-authors" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=network%20of%20co-authors%20/post/network/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/post/network/&amp;title=network%20of%20co-authors" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hu52a603635ecebd45650b162dadabb4e5_12861_270x270_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/">Abel Torres Espin</a></h5>
+      <h6 class="card-subtitle">Postdoctoral researcher</h6>
+      <p class="card-text">My research interests include Neurotrauma, data sharing and data reuse.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="/#contact" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://orcid.org/0000-0002-9787-8738" target="_blank" rel="noopener">
+        <i class="ai ai-orcid"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.researchgate.net/profile/Abel_Torres_Espin" target="_blank" rel="noopener">
+        <i class="ai ai-researchgate"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=c7vjfOUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.ncbi.nlm.nih.gov/pubmed/?term=Abel&#43;Torres-Espin" target="_blank" rel="noopener">
+        <i class="ai ai-pubmed"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/AbelTorresEspi2" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/ATEspin" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js" integrity="sha256-1zu+3BnLYV9LdiY85uXMzii3bdrkelyp37e0ZyTAQh0=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.c4716762638572b143da1c828c87dcd8.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

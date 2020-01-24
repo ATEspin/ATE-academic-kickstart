@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spinal Cord | ATE</title>
+    <link>/tags/spinal-cord/</link>
+      <atom:link href="/tags/spinal-cord/index.xml" rel="self" type="application/rss+xml" />
+    <description>Spinal Cord</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 01 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Spinal Cord</title>
+      <link>/tags/spinal-cord/</link>
+    </image>
+    
+    <item>
+      <title>Eliciting inflammation enables successful rehabilitative training in chronic spinal cord injury</title>
+      <link>/publication/torres-espin-eliciting-2018/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-eliciting-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cyclosporine-immunosuppression does not affect survival of transplanted skin-derived precursor Schwann cells in the injured rat spinal cord</title>
+      <link>/publication/may-cyclosporine-immunosuppression-2017/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-cyclosporine-immunosuppression-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Effects of the Post-Spinal Cord Injury Microenvironment on the Differentiation Capacity of Human Neural Stem Cells Derived from Induced Pluripotent Stem Cells</title>
+      <link>/publication/lopez-serrano-effects-2016/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/lopez-serrano-effects-2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Activity dependent therapies modulate the spinal changes that motoneurons suffer after a peripheral nerve injury</title>
+      <link>/publication/arbat-plana-activity-2015/</link>
+      <pubDate>Thu, 01 Jan 2015 00:00:00 +0000</pubDate>
+      <guid>/publication/arbat-plana-activity-2015/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bone marrow mesenchymal stromal cells and olfactory ensheathing cells transplantation after spinal cord injury--a morphological and functional comparison in rats</title>
+      <link>/publication/torres-espin-bone-2014/</link>
+      <pubDate>Thu, 01 May 2014 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-bone-2014/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Adult stem cell transplants for spinal cord injury repair: current state in preclinical research</title>
+      <link>/publication/hernandez-adult-2011/</link>
+      <pubDate>Thu, 01 Sep 2011 00:00:00 +0000</pubDate>
+      <guid>/publication/hernandez-adult-2011/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Functional involvement of the lumbar spinal cord after contusion to T8 spinal segment of the rat</title>
+      <link>/publication/garcia-alias-functional-2010/</link>
+      <pubDate>Fri, 01 Jan 2010 00:00:00 +0000</pubDate>
+      <guid>/publication/garcia-alias-functional-2010/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

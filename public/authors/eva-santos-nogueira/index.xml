@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Eva Santos-Nogueira | ATE</title>
+    <link>/authors/eva-santos-nogueira/</link>
+      <atom:link href="/authors/eva-santos-nogueira/index.xml" rel="self" type="application/rss+xml" />
+    <description>Eva Santos-Nogueira</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 01 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Eva Santos-Nogueira</title>
+      <link>/authors/eva-santos-nogueira/</link>
+    </image>
+    
+    <item>
+      <title>Beneficial effects of IL-37 after spinal cord injury in mice</title>
+      <link>/publication/coll-miro-beneficial-2016/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/coll-miro-beneficial-2016/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

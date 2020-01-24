@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Neuroglia | ATE</title>
+    <link>/tags/neuroglia/</link>
+      <atom:link href="/tags/neuroglia/index.xml" rel="self" type="application/rss+xml" />
+    <description>Neuroglia</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 01 Jul 2015 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Neuroglia</title>
+      <link>/tags/neuroglia/</link>
+    </image>
+    
+    <item>
+      <title>Increased migration of olfactory ensheathing cells secreting the Nogo receptor ectodomain over inhibitory substrates and lesioned spinal cord</title>
+      <link>/publication/reginensi-increased-2015/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/publication/reginensi-increased-2015/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Gene expression changes in the injured spinal cord following transplantation of mesenchymal stem cells or olfactory ensheathing cells</title>
+      <link>/publication/torres-espin-gene-2013/</link>
+      <pubDate>Tue, 01 Jan 2013 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-gene-2013/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

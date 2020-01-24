@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vance P. Lemmon | ATE</title>
+    <link>/authors/vance-p.-lemmon/</link>
+      <atom:link href="/authors/vance-p.-lemmon/index.xml" rel="self" type="application/rss+xml" />
+    <description>Vance P. Lemmon</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Vance P. Lemmon</title>
+      <link>/authors/vance-p.-lemmon/</link>
+    </image>
+    
+    <item>
+      <title>FAIR SCI Ahead: The Evolution of the Open Data Commons for Pre-Clinical Spinal Cord Injury Research</title>
+      <link>/publication/fouad-fair-2019/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/fouad-fair-2019/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

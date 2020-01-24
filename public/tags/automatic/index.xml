@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Automatic | ATE</title>
+    <link>/tags/automatic/</link>
+      <atom:link href="/tags/automatic/index.xml" rel="self" type="application/rss+xml" />
+    <description>Automatic</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 01 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Automatic</title>
+      <link>/tags/automatic/</link>
+    </image>
+    
+    <item>
+      <title>A motorized pellet dispenser to deliver high intensity training of the single pellet reaching and grasping task in rats</title>
+      <link>/publication/torres-espin-motorized-2018/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-motorized-2018/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

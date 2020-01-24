@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spinal cord injury | ATE</title>
+    <link>/tags/spinal-cord-injury/</link>
+      <atom:link href="/tags/spinal-cord-injury/index.xml" rel="self" type="application/rss+xml" />
+    <description>Spinal cord injury</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Spinal cord injury</title>
+      <link>/tags/spinal-cord-injury/</link>
+    </image>
+    
+    <item>
+      <title>Single-session cortical electrical stimulation enhances the efficacy of rehabilitative motor training after spinal cord injury in rats</title>
+      <link>/publication/batty-single-session-2020/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/publication/batty-single-session-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>FAIR SCI Ahead: The Evolution of the Open Data Commons for Pre-Clinical Spinal Cord Injury Research</title>
+      <link>/publication/fouad-fair-2019/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/fouad-fair-2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rehabilitative Training in Animal Models of Spinal Cord Injury</title>
+      <link>/publication/torres-espin-rehabilitative-2018/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-rehabilitative-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cyclosporine-immunosuppression does not affect survival of transplanted skin-derived precursor Schwann cells in the injured rat spinal cord</title>
+      <link>/publication/may-cyclosporine-immunosuppression-2017/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-cyclosporine-immunosuppression-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Beneficial effects of IL-37 after spinal cord injury in mice</title>
+      <link>/publication/coll-miro-beneficial-2016/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/coll-miro-beneficial-2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Single pellet grasping following cervical spinal cord injury in adult rat using an automated full-time training robot</title>
+      <link>/publication/fenrich-single-2016/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/fenrich-single-2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Immunosuppression of allogenic mesenchymal stem cells transplantation after spinal cord injury improves graft survival and beneficial outcomes</title>
+      <link>/publication/torres-espin-immunosuppression-2015/</link>
+      <pubDate>Sun, 01 Mar 2015 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-immunosuppression-2015/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bone marrow mesenchymal stromal cells and olfactory ensheathing cells transplantation after spinal cord injury--a morphological and functional comparison in rats</title>
+      <link>/publication/torres-espin-bone-2014/</link>
+      <pubDate>Thu, 01 May 2014 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-bone-2014/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

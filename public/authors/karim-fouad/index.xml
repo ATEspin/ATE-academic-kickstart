@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Karim Fouad | ATE</title>
+    <link>/authors/karim-fouad/</link>
+      <atom:link href="/authors/karim-fouad/index.xml" rel="self" type="application/rss+xml" />
+    <description>Karim Fouad</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Karim Fouad</title>
+      <link>/authors/karim-fouad/</link>
+    </image>
+    
+    <item>
+      <title>Single-session cortical electrical stimulation enhances the efficacy of rehabilitative motor training after spinal cord injury in rats</title>
+      <link>/publication/batty-single-session-2020/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/publication/batty-single-session-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Fecal transplant prevents gut dysbiosis and anxiety-like behaviour after spinal cord injury in rats</title>
+      <link>/publication/schmidt-fecal-2020/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/publication/schmidt-fecal-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>FAIR SCI Ahead: The Evolution of the Open Data Commons for Pre-Clinical Spinal Cord Injury Research</title>
+      <link>/publication/fouad-fair-2019/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/fouad-fair-2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mechanisms of Behavioral Changes After Spinal Cord Injury</title>
+      <link>/publication/fouad-mechanisms-2019/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>/publication/fouad-mechanisms-2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>A motorized pellet dispenser to deliver high intensity training of the single pellet reaching and grasping task in rats</title>
+      <link>/publication/torres-espin-motorized-2018/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-motorized-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Eliciting inflammation enables successful rehabilitative training in chronic spinal cord injury</title>
+      <link>/publication/torres-espin-eliciting-2018/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-eliciting-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rehabilitative Training in Animal Models of Spinal Cord Injury</title>
+      <link>/publication/torres-espin-rehabilitative-2018/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-rehabilitative-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cyclosporine-immunosuppression does not affect survival of transplanted skin-derived precursor Schwann cells in the injured rat spinal cord</title>
+      <link>/publication/may-cyclosporine-immunosuppression-2017/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-cyclosporine-immunosuppression-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Following Spinal Cord Injury Transected Reticulospinal Tract Axons Develop New Collateral Inputs to Spinal Interneurons in Parallel with Locomotor Recovery</title>
+      <link>/publication/may-following-2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-following-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Single pellet grasping following cervical spinal cord injury in adult rat using an automated full-time training robot</title>
+      <link>/publication/fenrich-single-2016/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/fenrich-single-2016/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

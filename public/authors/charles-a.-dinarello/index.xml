@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Charles A. Dinarello | ATE</title>
+    <link>/authors/charles-a.-dinarello/</link>
+      <atom:link href="/authors/charles-a.-dinarello/index.xml" rel="self" type="application/rss+xml" />
+    <description>Charles A. Dinarello</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 01 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Charles A. Dinarello</title>
+      <link>/authors/charles-a.-dinarello/</link>
+    </image>
+    
+    <item>
+      <title>Beneficial effects of IL-37 after spinal cord injury in mice</title>
+      <link>/publication/coll-miro-beneficial-2016/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/coll-miro-beneficial-2016/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

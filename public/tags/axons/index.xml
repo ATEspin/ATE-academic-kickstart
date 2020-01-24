@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Axons | ATE</title>
+    <link>/tags/axons/</link>
+      <atom:link href="/tags/axons/index.xml" rel="self" type="application/rss+xml" />
+    <description>Axons</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Axons</title>
+      <link>/tags/axons/</link>
+    </image>
+    
+    <item>
+      <title>Following Spinal Cord Injury Transected Reticulospinal Tract Axons Develop New Collateral Inputs to Spinal Interneurons in Parallel with Locomotor Recovery</title>
+      <link>/publication/may-following-2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-following-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Increased migration of olfactory ensheathing cells secreting the Nogo receptor ectodomain over inhibitory substrates and lesioned spinal cord</title>
+      <link>/publication/reginensi-increased-2015/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/publication/reginensi-increased-2015/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Neuroprotection and axonal regeneration after lumbar ventral root avulsion by re-implantation and mesenchymal stem cells transplant combined therapy</title>
+      <link>/publication/torres-espin-neuroprotection-2013/</link>
+      <pubDate>Mon, 01 Apr 2013 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-neuroprotection-2013/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Joaquim Hernández | ATE</title>
+    <link>/authors/joaquim-hernandez/</link>
+      <atom:link href="/authors/joaquim-hernandez/index.xml" rel="self" type="application/rss+xml" />
+    <description>Joaquim Hernández</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 01 Jan 2016 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Joaquim Hernández</title>
+      <link>/authors/joaquim-hernandez/</link>
+    </image>
+    
+    <item>
+      <title>Effects of the Post-Spinal Cord Injury Microenvironment on the Differentiation Capacity of Human Neural Stem Cells Derived from Induced Pluripotent Stem Cells</title>
+      <link>/publication/lopez-serrano-effects-2016/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/lopez-serrano-effects-2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Immunosuppression of allogenic mesenchymal stem cells transplantation after spinal cord injury improves graft survival and beneficial outcomes</title>
+      <link>/publication/torres-espin-immunosuppression-2015/</link>
+      <pubDate>Sun, 01 Mar 2015 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-immunosuppression-2015/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bone marrow mesenchymal stromal cells and olfactory ensheathing cells transplantation after spinal cord injury--a morphological and functional comparison in rats</title>
+      <link>/publication/torres-espin-bone-2014/</link>
+      <pubDate>Thu, 01 May 2014 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-bone-2014/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Gene expression changes in the injured spinal cord following transplantation of mesenchymal stem cells or olfactory ensheathing cells</title>
+      <link>/publication/torres-espin-gene-2013/</link>
+      <pubDate>Tue, 01 Jan 2013 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-gene-2013/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Adult stem cell transplants for spinal cord injury repair: current state in preclinical research</title>
+      <link>/publication/hernandez-adult-2011/</link>
+      <pubDate>Thu, 01 Sep 2011 00:00:00 +0000</pubDate>
+      <guid>/publication/hernandez-adult-2011/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

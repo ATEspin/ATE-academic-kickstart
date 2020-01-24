@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Thoracic Vertebrae | ATE</title>
+    <link>/tags/thoracic-vertebrae/</link>
+      <atom:link href="/tags/thoracic-vertebrae/index.xml" rel="self" type="application/rss+xml" />
+    <description>Thoracic Vertebrae</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Thoracic Vertebrae</title>
+      <link>/tags/thoracic-vertebrae/</link>
+    </image>
+    
+    <item>
+      <title>Following Spinal Cord Injury Transected Reticulospinal Tract Axons Develop New Collateral Inputs to Spinal Interneurons in Parallel with Locomotor Recovery</title>
+      <link>/publication/may-following-2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-following-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Functional involvement of the lumbar spinal cord after contusion to T8 spinal segment of the rat</title>
+      <link>/publication/garcia-alias-functional-2010/</link>
+      <pubDate>Fri, 01 Jan 2010 00:00:00 +0000</pubDate>
+      <guid>/publication/garcia-alias-functional-2010/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

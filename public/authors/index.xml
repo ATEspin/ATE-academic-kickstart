@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Authors | ATE</title>
+    <link>/authors/</link>
+      <atom:link href="/authors/index.xml" rel="self" type="application/rss+xml" />
+    <description>Authors</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Authors</title>
+      <link>/authors/</link>
+    </image>
+    
+    <item>
+      <title>Abel Torres-Espín</title>
+      <link>/authors/abel-torres-espin/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/abel-torres-espin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Karim Fouad</title>
+      <link>/authors/karim-fouad/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/karim-fouad/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Nicholas J. Batty</title>
+      <link>/authors/nicholas-j.-batty/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/nicholas-j.-batty/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Pamela Raposo</title>
+      <link>/authors/pamela-raposo/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/pamela-raposo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Romana Vavrek</title>
+      <link>/authors/romana-vavrek/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/romana-vavrek/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Emma K. A. Schmidt</title>
+      <link>/authors/emma-k.-a.-schmidt/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/emma-k.-a.-schmidt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Karen L. Madsen</title>
+      <link>/authors/karen-l.-madsen/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/karen-l.-madsen/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Keith K. Fenrich</title>
+      <link>/authors/keith-k.-fenrich/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/keith-k.-fenrich/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kristina A. Kigerl</title>
+      <link>/authors/kristina-a.-kigerl/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/kristina-a.-kigerl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Pamela J. F. Raposo</title>
+      <link>/authors/pamela-j.-f.-raposo/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/pamela-j.-f.-raposo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Phillip G. Popovich</title>
+      <link>/authors/phillip-g.-popovich/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/authors/phillip-g.-popovich/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Adam R. Ferguson</title>
+      <link>/authors/adam-r.-ferguson/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/adam-r.-ferguson/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Alison Callahan</title>
+      <link>/authors/alison-callahan/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/alison-callahan/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Carol Taylor-Burds</title>
+      <link>/authors/carol-taylor-burds/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/carol-taylor-burds/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>David S. K. Magnuson</title>
+      <link>/authors/david-s.-k.-magnuson/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/david-s.-k.-magnuson/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>FAIR-SCI Ahead Workshop Participants</title>
+      <link>/authors/fair-sci-ahead-workshop-participants/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/fair-sci-ahead-workshop-participants/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Jan M. Schwab</title>
+      <link>/authors/jan-m.-schwab/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/jan-m.-schwab/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Jeffrey S. Grethe</title>
+      <link>/authors/jeffrey-s.-grethe/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/jeffrey-s.-grethe/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Jessica L. Nielson</title>
+      <link>/authors/jessica-l.-nielson/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/jessica-l.-nielson/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>John L. Bixby</title>
+      <link>/authors/john-l.-bixby/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/john-l.-bixby/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Lyn B. Jakeman</title>
+      <link>/authors/lyn-b.-jakeman/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/lyn-b.-jakeman/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Maryann E. Martone</title>
+      <link>/authors/maryann-e.-martone/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/maryann-e.-martone/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Vance P. Lemmon</title>
+      <link>/authors/vance-p.-lemmon/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/vance-p.-lemmon/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Wolfram Tetzlaff</title>
+      <link>/authors/wolfram-tetzlaff/</link>
+      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/authors/wolfram-tetzlaff/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Aleksandra Krajacic</title>
+      <link>/authors/aleksandra-krajacic/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/authors/aleksandra-krajacic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ana M. Lucas-Osma</title>
+      <link>/authors/ana-m.-lucas-osma/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/authors/ana-m.-lucas-osma/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>David J. Bennett</title>
+      <link>/authors/david-j.-bennett/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/authors/david-j.-bennett/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Emma Schmidt</title>
+      <link>/authors/emma-schmidt/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/authors/emma-schmidt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Eric Beaudry</title>
+      <link>/authors/eric-beaudry/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/authors/eric-beaudry/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Juan Forero</title>
+      <link>/authors/juan-forero/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/authors/juan-forero/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Keith Fenrich</title>
+      <link>/authors/keith-fenrich/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/authors/keith-fenrich/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Jeff Biernaskie</title>
+      <link>/authors/jeff-biernaskie/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/authors/jeff-biernaskie/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Molly Shoichet</title>
+      <link>/authors/molly-shoichet/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/authors/molly-shoichet/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Morgan G. Stykel</title>
+      <link>/authors/morgan-g.-stykel/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/authors/morgan-g.-stykel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tobias Führmann</title>
+      <link>/authors/tobias-fuhrmann/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/authors/tobias-fuhrmann/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Zacnicte May</title>
+      <link>/authors/zacnicte-may/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/authors/zacnicte-may/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Julia Dahlby</title>
+      <link>/authors/julia-dahlby/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>/authors/julia-dahlby/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Charles A. Dinarello</title>
+      <link>/authors/charles-a.-dinarello/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/charles-a.-dinarello/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Eva Santos-Nogueira</title>
+      <link>/authors/eva-santos-nogueira/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/eva-santos-nogueira/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Isaac Francos-Quijorna</title>
+      <link>/authors/isaac-francos-quijorna/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/isaac-francos-quijorna/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Marina Coll-Miró</title>
+      <link>/authors/marina-coll-miro/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/marina-coll-miro/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Philip Bufler</title>
+      <link>/authors/philip-bufler/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/philip-bufler/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rubèn López-Vales</title>
+      <link>/authors/ruben-lopez-vales/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/ruben-lopez-vales/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Zacincte May</title>
+      <link>/authors/zacincte-may/</link>
+      <pubDate>Mon, 01 Feb 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/zacincte-may/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ana B. Alvarez-Palomo</title>
+      <link>/authors/ana-b.-alvarez-palomo/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/ana-b.-alvarez-palomo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Clara López-Serrano</title>
+      <link>/authors/clara-lopez-serrano/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/clara-lopez-serrano/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Joaquim Hernández</title>
+      <link>/authors/joaquim-hernandez/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/joaquim-hernandez/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Jordi Requena</title>
+      <link>/authors/jordi-requena/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/jordi-requena/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Michael J. Edel</title>
+      <link>/authors/michael-j.-edel/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/michael-j.-edel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Xavier Gasull</title>
+      <link>/authors/xavier-gasull/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/xavier-gasull/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Xavier Navarro</title>
+      <link>/authors/xavier-navarro/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/authors/xavier-navarro/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Andreu Matamoros-Angles</title>
+      <link>/authors/andreu-matamoros-angles/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/andreu-matamoros-angles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Diego Reginensi</title>
+      <link>/authors/diego-reginensi/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/diego-reginensi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Francisco Wandosell</title>
+      <link>/authors/francisco-wandosell/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/francisco-wandosell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Josep Samitier</title>
+      <link>/authors/josep-samitier/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/josep-samitier/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>José Antonio del Río</title>
+      <link>/authors/jose-antonio-del-rio/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/jose-antonio-del-rio/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>María Teresa Moreno-Flores</title>
+      <link>/authors/maria-teresa-moreno-flores/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/maria-teresa-moreno-flores/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Oscar Seira</title>
+      <link>/authors/oscar-seira/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/oscar-seira/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Patricia Carulla</title>
+      <link>/authors/patricia-carulla/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/patricia-carulla/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rosalina Gavín</title>
+      <link>/authors/rosalina-gavin/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/rosalina-gavin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sara Nocentini</title>
+      <link>/authors/sara-nocentini/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/sara-nocentini/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Xavier Serra-Picamal</title>
+      <link>/authors/xavier-serra-picamal/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/xavier-serra-picamal/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Xavier Trepat</title>
+      <link>/authors/xavier-trepat/</link>
+      <pubDate>Wed, 01 Jul 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/xavier-trepat/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Elena Redondo-Castro</title>
+      <link>/authors/elena-redondo-castro/</link>
+      <pubDate>Sun, 01 Mar 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/elena-redondo-castro/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ariadna Arbat-Plana</title>
+      <link>/authors/ariadna-arbat-plana/</link>
+      <pubDate>Thu, 01 Jan 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/ariadna-arbat-plana/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Esther Udina</title>
+      <link>/authors/esther-udina/</link>
+      <pubDate>Thu, 01 Jan 2015 00:00:00 +0000</pubDate>
+      <guid>/authors/esther-udina/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Carme Auladell</title>
+      <link>/authors/carme-auladell/</link>
+      <pubDate>Wed, 01 Oct 2014 00:00:00 +0000</pubDate>
+      <guid>/authors/carme-auladell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Daniel Duque</title>
+      <link>/authors/daniel-duque/</link>
+      <pubDate>Wed, 01 Oct 2014 00:00:00 +0000</pubDate>
+      <guid>/authors/daniel-duque/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Fèlix Junyent</title>
+      <link>/authors/felix-junyent/</link>
+      <pubDate>Wed, 01 Oct 2014 00:00:00 +0000</pubDate>
+      <guid>/authors/felix-junyent/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Juana Utrera</title>
+      <link>/authors/juana-utrera/</link>
+      <pubDate>Wed, 01 Oct 2014 00:00:00 +0000</pubDate>
+      <guid>/authors/juana-utrera/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rafael Romero</title>
+      <link>/authors/rafael-romero/</link>
+      <pubDate>Wed, 01 Oct 2014 00:00:00 +0000</pubDate>
+      <guid>/authors/rafael-romero/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dora Luz Corona-Quintanilla</title>
+      <link>/authors/dora-luz-corona-quintanilla/</link>
+      <pubDate>Mon, 01 Apr 2013 00:00:00 +0000</pubDate>
+      <guid>/authors/dora-luz-corona-quintanilla/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Francisco González</title>
+      <link>/authors/francisco-gonzalez/</link>
+      <pubDate>Mon, 01 Apr 2013 00:00:00 +0000</pubDate>
+      <guid>/authors/francisco-gonzalez/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ilary Allodi</title>
+      <link>/authors/ilary-allodi/</link>
+      <pubDate>Mon, 01 Apr 2013 00:00:00 +0000</pubDate>
+      <guid>/authors/ilary-allodi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Joaquim Forés</title>
+      <link>/authors/joaquim-fores/</link>
+      <pubDate>Mon, 01 Apr 2013 00:00:00 +0000</pubDate>
+      <guid>/authors/joaquim-fores/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Guillermo García-Alías</title>
+      <link>/authors/guillermo-garcia-alias/</link>
+      <pubDate>Fri, 01 Mar 2013 00:00:00 +0000</pubDate>
+      <guid>/authors/guillermo-garcia-alias/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Carolina Vallejo</title>
+      <link>/authors/carolina-vallejo/</link>
+      <pubDate>Fri, 01 Jan 2010 00:00:00 +0000</pubDate>
+      <guid>/authors/carolina-vallejo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/authors/admin/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/authors/admin/</guid>
+      <description>&lt;p&gt;I was born in 
+&lt;a href=&#34;https://www.google.es/search?q=mataro&amp;amp;rlz=1C1CHZL_enCA733CA734&amp;amp;source=lnms&amp;amp;tbm=isch&amp;amp;sa=X&amp;amp;ved=0ahUKEwj_v_j7nN3dAhVDiRoKHf_DCR0Q_AUICigB&amp;amp;biw=1536&amp;amp;bih=718&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Mataro&lt;/a&gt;
+,close to Barcelona, Spain. I studied biology at the 
+&lt;a href=&#34;https://www.ub.edu/web/ub/en/index.html?&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Universitat de Barcelona&lt;/a&gt;
+ from 2002 to 2007. In 2008 I started my PhD in the neuroscience program at the 
+&lt;a href=&#34;https://www.uab.cat/es/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Universitat Autonoma de Barcelona&lt;/a&gt;
+ under the supervision of 
+&lt;a href=&#34;http://inc.uab.cat/English/profile.php?id=105&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Dr. Xavier Navarro&lt;/a&gt;
+, finishing my thesis entitled &amp;lsquo;Terapia celular para lesiones que afectan a la medula espinal&amp;rsquo; (Cell therapy for injuries affecting the spinal cord). In 2014, I moved to Edmonton, Canada, for a postdoctoral position at the 
+&lt;a href=&#34;https://www.ualberta.ca/index.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;University of Alberta&lt;/a&gt;
+ under the supervision of 
+&lt;a href=&#34;https://www.ualberta.ca/rehabilitation/about-us/contact-us/faculty-directory/karim-fouad&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Dr. Karim Fouad&lt;/a&gt;
+. Here I worked on the interaction between neuroinflammation and rehabilitative motor training after cervical spinal cord injury. Since November 2018, I am working at the 
+&lt;a href=&#34;https://www.ucsf.edu/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;University of California San Francisco&lt;/a&gt;
+ in a team led by 
+&lt;a href=&#34;http://neurosurgery.ucsf.edu/index.php/about_us_faculty_ferguson.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Dr. Adam Ferguson&lt;/a&gt;
+, where we work on the application of data science to accelerate neurotrauma research and translation.&lt;/p&gt;
+&lt;p&gt;When I&#39;m not doing research, I spend my time coding, visiting mountains and climbing.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/authors/cv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/authors/cv/</guid>
+      <description>&lt;p&gt;My current interest focuses on the intersection between neurotrauma research and data science. I strive to apply, explore and develop data science methods in traumatic injuries affecting the brain and the spinal cord to increase reproducibility, accelerate translation and augment evidence-based medical practice. These methods include machine learning and intelligence analytics, data sharing, data infrastructures, data mining and data visualization, among others.&lt;/p&gt;
+&lt;p&gt;I use the programming language R as primary tool, and Python from time to time.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

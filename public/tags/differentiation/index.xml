@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Differentiation | ATE</title>
+    <link>/tags/differentiation/</link>
+      <atom:link href="/tags/differentiation/index.xml" rel="self" type="application/rss+xml" />
+    <description>Differentiation</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 01 Jan 2016 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Differentiation</title>
+      <link>/tags/differentiation/</link>
+    </image>
+    
+    <item>
+      <title>Effects of the Post-Spinal Cord Injury Microenvironment on the Differentiation Capacity of Human Neural Stem Cells Derived from Induced Pluripotent Stem Cells</title>
+      <link>/publication/lopez-serrano-effects-2016/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>/publication/lopez-serrano-effects-2016/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

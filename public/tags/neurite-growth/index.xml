@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Neurite growth | ATE</title>
+    <link>/tags/neurite-growth/</link>
+      <atom:link href="/tags/neurite-growth/index.xml" rel="self" type="application/rss+xml" />
+    <description>Neurite growth</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Neurite growth</title>
+      <link>/tags/neurite-growth/</link>
+    </image>
+    
+    <item>
+      <title>Single-session cortical electrical stimulation enhances the efficacy of rehabilitative motor training after spinal cord injury in rats</title>
+      <link>/publication/batty-single-session-2020/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/publication/batty-single-session-2020/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

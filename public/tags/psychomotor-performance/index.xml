@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Psychomotor Performance | ATE</title>
+    <link>/tags/psychomotor-performance/</link>
+      <atom:link href="/tags/psychomotor-performance/index.xml" rel="self" type="application/rss+xml" />
+    <description>Psychomotor Performance</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 01 Mar 2013 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Psychomotor Performance</title>
+      <link>/tags/psychomotor-performance/</link>
+    </image>
+    
+    <item>
+      <title>Quantitative assessment of locomotion and interlimb coordination in rats after different spinal cord injuries</title>
+      <link>/publication/redondo-castro-quantitative-2013/</link>
+      <pubDate>Fri, 01 Mar 2013 00:00:00 +0000</pubDate>
+      <guid>/publication/redondo-castro-quantitative-2013/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Schotter | ATE</title>
+    <link>/tags/schotter/</link>
+      <atom:link href="/tags/schotter/index.xml" rel="self" type="application/rss+xml" />
+    <description>Schotter</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 01 Jan 2020 21:13:14 -0500</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Schotter</title>
+      <link>/tags/schotter/</link>
+    </image>
+    
+    <item>
+      <title>Reproducing Schotter in R</title>
+      <link>/post/schotter/schotter/</link>
+      <pubDate>Wed, 01 Jan 2020 21:13:14 -0500</pubDate>
+      <guid>/post/schotter/schotter/</guid>
+      <description>
+
+
+&lt;p&gt;I have been captivated by creative coding and generative art for a while. After discovering some of the work by &lt;a href=&#34;https://twitter.com/aschinchon&#34;&gt;Antonio S.Chinchón&lt;/a&gt; and his blog &lt;a href=&#34;https://fronkonstin.com/&#34;&gt;Fronkonstin&lt;/a&gt; on using R and mathematics to create amazing art work, I decided to play around. &lt;a href=&#34;http://www.medienkunstnetz.de/works/schotter/&#34;&gt;Schotter&lt;/a&gt; (1968) is a famous piece by &lt;a href=&#34;https://en.wikipedia.org/wiki/Georg_Nees&#34;&gt;Georg Nees&lt;/a&gt;, a pioneer in computer graphics and probably one of the first creative coders.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.medienkunstnetz.de/works/schotter/&#34;&gt;&lt;strong&gt;CHECK THE ORIGINAL NOW&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;To pay tribute to Georg, I decided to implement a chunk of code that would reproduce Schotter using R. There are probably several ways to code this algorithm and I am sure several people have done this before. My goal was to see if my current R knowledge could be use to program Schotter without checking other implementations and learn something on the way.&lt;/p&gt;
+&lt;p&gt;Here my thought process.&lt;/p&gt;
+&lt;div id=&#34;the-libraries&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The libraries&lt;/h2&gt;
+&lt;p&gt;Nowadays I use &lt;a href=&#34;https://ggplot2.tidyverse.org/&#34;&gt;ggplot2&lt;/a&gt; for every visualization, so I decided to utilize its amazing graphical powers. I also used &lt;a href=&#34;https://dplyr.tidyverse.org/&#34;&gt;dplyr&lt;/a&gt; although we could easily not use it here.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+library(dplyr)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;building-a-square&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Building a square&lt;/h2&gt;
+&lt;p&gt;The easiest way to build a square in ggplot2 is probably using &lt;em&gt;geom_rect&lt;/em&gt;, however I did not find a way to rotate the geometry, so I decided to go for a polygon (&lt;em&gt;geom_polygon&lt;/em&gt;) and control the position of the 4 vertices outside ggplot. For that I created the following function:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;square&amp;lt;-function(x0=1,y0=1, size=1, angle=0){
+  xor&amp;lt;-x0+size/2 #X origin (center of the square)
+  yor&amp;lt;-y0+size/2 #Y origin (center of the square)
+  
+  tibble(
+    x=c(x0,x0+size,x0+size,x0),
+    y=c(y0,y0,y0+size,y0+size)
+  )%&amp;gt;%mutate(x2=(x-xor)*cos(angle)-(y-yor)*sin(angle)+xor, #For rotation
+             y2=(x-xor)*sin(angle)+(y-yor)*cos(angle)+yor) #for rotation
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Where &lt;strong&gt;x0&lt;/strong&gt; and &lt;strong&gt;y0&lt;/strong&gt; control the position of lower left (or other depending on the axis orientation) vertex, size the length of the sides and angle the amount of rotation from the original position. An &lt;strong&gt;x&lt;/strong&gt; and &lt;strong&gt;y&lt;/strong&gt; for each vertex is set as a template relative to &lt;strong&gt;x0&lt;/strong&gt;, &lt;strong&gt;y0&lt;/strong&gt; and size. In this way, we will be able to control the position of the square in the canvas. &lt;strong&gt;x2&lt;/strong&gt; and &lt;strong&gt;y2&lt;/strong&gt; are set as the rotated coordinates for &lt;strong&gt;x&lt;/strong&gt; and &lt;strong&gt;y&lt;/strong&gt;, respectively. Ultimately, we will use &lt;strong&gt;x2&lt;/strong&gt; and &lt;strong&gt;y2&lt;/strong&gt;, that will be equal to &lt;strong&gt;x&lt;/strong&gt; and &lt;strong&gt;y&lt;/strong&gt; if angle is 0. I decided to generate new columns for the rotations so I can plot both, the original x, y and the rotated (I confess I had to brush up my trigonometry and google a few things for this).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(square())+
+  geom_polygon(aes(x=x, y=y))+
+  coord_fixed()# just so that axis are equally spaced&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We have our first square!! We can now play with fill and color&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(square())+
+  geom_polygon(aes(x=x, y=y), fill=NA, color=&amp;#39;black&amp;#39;)+
+  coord_fixed()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Let’s play with some parameters&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(square(size=2,angle=pi/4))+#size 2 and rotate 45 degrees
+  geom_polygon(aes(x=x, y=y), fill=NA, color=&amp;#39;black&amp;#39;)+
+  geom_polygon(aes(x=x2, y=y2), fill=NA, color=&amp;#39;red&amp;#39;)+
+  coord_fixed()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;how-many-squares-we-want&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;How many squares we want?&lt;/h2&gt;
+&lt;p&gt;Schotter can be seen as a matrix of squares. A simple way to iterate through a matrix is to nest a loop inside a loop such that one loop goes through the rows and another through the columns.&lt;/p&gt;
+&lt;p&gt;The original Schotter has 12 columns and 24 rows (that I counted)&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n&amp;lt;-24*12
+df.list&amp;lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      temp&amp;lt;-square(x=i, y=j) #create a square at column i and row j
+      df.list[[n]]&amp;lt;-temp #save the data frame with the square n on a list
+      n&amp;lt;-n-1
+    }
+  }&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This chunk creates a data frame containing the &lt;strong&gt;x&lt;/strong&gt;, &lt;strong&gt;y&lt;/strong&gt;, &lt;strong&gt;x2&lt;/strong&gt; and &lt;strong&gt;y2&lt;/strong&gt; for 288 (24x12) squares, that we can plotted. To plot each square independently as we will need for later, we need to add a new &lt;em&gt;geom_polygon&lt;/em&gt; layer for each square to a ggplot object. We could have done this in the previous loops, but in the course of this mini project I have learned that you can pass a list to ggplot. So, we can iterate though our list of square data frames using lapply and add a &lt;em&gt;geom_polygon&lt;/em&gt; for each square (a bit slow on my friend).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&amp;#39;black&amp;#39;)}
+  )+
+  coord_fixed()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Now we have the grid of squares. At this point I have decided to deal with the unnecessary elements of the plot. I generated a theme function such that I can easily change the background color.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;theme_background&amp;lt;-function(color=&amp;#39;white&amp;#39;){
+  theme(axis.ticks = element_blank(), axis.text = element_blank(),
+        panel.background = element_blank(), panel.grid = element_blank(),
+        plot.background = element_rect(fill = color),
+        strip.background = element_rect(fill=color),strip.text = element_blank(),
+        axis.title = element_blank(), legend.position = &amp;#39;none&amp;#39;)
+}
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&amp;#39;black&amp;#39;)}
+  )+
+  coord_fixed()+
+  theme_background()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;generative-process&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Generative process&lt;/h2&gt;
+&lt;p&gt;Generative art is define by wikipedia as:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Generative art refers to art that in whole or in part has been created with the use of an autonomous system. An autonomous system in this context is generally one that is non-human and can independently determine features of an artwork that would otherwise require decisions made directly by the artist. &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;An easy way to give autonomy to our code is by introducing randomness. As we can appreciate from Schotter, both the position and the angle of the squares seems to be more random and move away from the ‘calm’ stage as we move through the rows. We will add this to our nested loops by generating a random displacement and rotation for each square that increases by row.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n&amp;lt;-24*12
+df.list&amp;lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      displace&amp;lt;-runif(1,-j,j) #a random number is generated from a uniform distribution with min=-j and max=j
+      rotate&amp;lt;-runif(1,-j,j) #random number to rotate the square
+      temp&amp;lt;-square(x=i+displace, y=j+displace, angle=rotate) #create a square at column i and row j displaced by displace
+      df.list[[n]]&amp;lt;-temp #save the data frame with the square n on a list
+      n&amp;lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&amp;#39;black&amp;#39;)}
+  )+
+  coord_fixed()+
+  theme_background()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Ups! Something isn’t quite right (although I like it!). I think is because &lt;em&gt;j&lt;/em&gt;, that controls how much displacement and rotation can be added get to be too big in respect to &lt;strong&gt;x&lt;/strong&gt; and &lt;strong&gt;y&lt;/strong&gt;. So, let’s control for that. For that I divided &lt;em&gt;j&lt;/em&gt; by 40 in the case of displace and by 100 in the case of rotate. I found these numbers by playing around. I also flipped y axis.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n&amp;lt;-24*12
+df.list&amp;lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      displace&amp;lt;-runif(1,-j/40,j/40) #a random number is generated from a uniform distribution with min=-j and max=j
+      rotate&amp;lt;-runif(1,-j/100,j/100) #random number to rotate the square
+      temp&amp;lt;-square(x=i+displace, y=j+displace, angle=rotate) #create a square at column i and row j displaced by displace
+      df.list[[n]]&amp;lt;-temp #save the data frame with the square n on a list
+      n&amp;lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&amp;#39;black&amp;#39;)}
+  )+
+  coord_fixed()+
+  theme_background()+
+  scale_y_reverse()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;And &lt;em&gt;voila&lt;/em&gt;! we have coded a generative algorithm to produce something like Schotter. Because the randomness, every time we run the code, the result will be different.&lt;/p&gt;
+&lt;p&gt;Now we wrap the code in a function so that we can easily change parameters&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Schotter&amp;lt;-function(ncol_s=12, nrow_s=24, control_dis=40, 
+                   control_rot=100, fill_s=NA, color_s=&amp;#39;black&amp;#39;, alpha_s=0.2, 
+                   back_color=&amp;#39;white&amp;#39;){
+n&amp;lt;-ncol_s*nrow_s
+df.list&amp;lt;-list()
+  for (j in 1:nrow_s){
+    for (i in 1:ncol_s){
+      displace&amp;lt;-runif(1,-j/control_dis,j/control_dis)
+      rotate&amp;lt;-runif(1,-j/control_rot,j/control_rot)
+      temp&amp;lt;-square(x=i+displace, y=j+displace, angle=rotate)
+      temp$s&amp;lt;-rep(n)
+      df.list[[n]]&amp;lt;-temp
+      n&amp;lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2),
+                 alpha=alpha_s, fill=fill_s, color=color_s)}
+  )+
+  theme_background(color = back_color)+
+  coord_fixed()+
+  scale_y_reverse()
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can now play!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Schotter()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Schotter(fill=&amp;#39;firebrick&amp;#39;, color=&amp;#39;orange&amp;#39;, nrow_s = 48, control_dis = 20)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-13-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-end&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The End&lt;/h2&gt;
+&lt;p&gt;This is all for now. There are a few ways the code could be improved, but I am happy with the result and I have had fun and learned something new!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

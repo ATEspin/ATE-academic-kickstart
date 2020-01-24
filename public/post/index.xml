@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts | ATE</title>
+    <link>/post/</link>
+      <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <description>Posts</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 19 Jan 2020 21:13:14 -0500</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Posts</title>
+      <link>/post/</link>
+    </image>
+    
+    <item>
+      <title>Network of co-authors</title>
+      <link>/post/network-coauthors/network/</link>
+      <pubDate>Sun, 19 Jan 2020 21:13:14 -0500</pubDate>
+      <guid>/post/network-coauthors/network/</guid>
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/htmlwidgets/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;/rmarkdown-libs/vis/vis.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/vis/vis.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;/rmarkdown-libs/visNetwork-binding/visNetwork.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;This post will show you how you can extract and visualize your network of co-authors. You can also find the code for this post on GitHub.&lt;/p&gt;
+&lt;p&gt;Luckily for us, the hard work needed for this has been already programmed by amazing people out there, so we will be using these packages:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(easyPubMed) #API connection with pubmed
+library(tidyverse) #To facilitate some data wrangling
+library(igraph) #To build the graph
+library(visNetwork) #Interactive networks&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;extracting-pubmed-information&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Extracting Pubmed information&lt;/h2&gt;
+&lt;p&gt;The &lt;em&gt;easyPubMed&lt;/em&gt; package can be used for… yes, you guessed write… easily extract information from Pubmed. So, the first thing to do is to search us and extract the list of authors in our papers from the ‘medline’ format, tagged as ‘AU’.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_entrez_id &amp;lt;- get_pubmed_ids(&amp;#39;Torres-Espin A&amp;#39;)
+my_author_txt &amp;lt;- fetch_pubmed_data(my_entrez_id, format = &amp;quot;medline&amp;quot;)
+authors&amp;lt;-my_author_txt[str_detect(my_author_txt, &amp;quot;^AU &amp;quot;)]
+coauthors_list&amp;lt;-unique(str_remove_all(authors, &amp;#39;^AU  - &amp;#39;))
+head(coauthors_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Schmidt EKA&amp;quot;    &amp;quot;Torres-Espin A&amp;quot; &amp;quot;Raposo PJF&amp;quot;     &amp;quot;Madsen KL&amp;quot;     
+## [5] &amp;quot;Kigerl KA&amp;quot;      &amp;quot;Popovich PG&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that we use &lt;strong&gt;unique&lt;/strong&gt; because we might have more than one paper with the same author. We do this because now we are going to search the list of co-authors to get the relationship of publication between them. If you only want to get the first level connections of each co-author with you, then do not need to collapse the &lt;strong&gt;coauthors_list&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Now let’s create a data frame containing the list of co-authors for each author on our list of co-authors. We can do that by iterating through the same code we did before and saving the results in a list of data frames. We will stack the list of data frames at the end by calling &lt;strong&gt;rbind&lt;/strong&gt;. If you know some R you probably know that this code can be collapsed in fewer lines and be more efficient using &lt;strong&gt;apply&lt;/strong&gt;. I like using loops from time to time!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;author_list&amp;lt;-list()#define the list to save the data frames
+
+for (i in 1:length(coauthors_list)){
+  my_entrez_id &amp;lt;- get_pubmed_ids(coauthors_list[i])
+  my_author_txt &amp;lt;- fetch_pubmed_data(my_entrez_id, format = &amp;quot;medline&amp;quot;)
+  authors&amp;lt;-my_author_txt[str_detect(my_author_txt, &amp;quot;^AU &amp;quot;)]
+  authors&amp;lt;-str_remove_all(authors, &amp;#39;^AU  - &amp;#39;)
+  author_list[[i]]&amp;lt;-data.frame(co_authors=authors, author=coauthors_list[i])
+}
+author_df&amp;lt;-do.call(rbind, author_list)#stack data frames&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The next step is filtering our data frame to keep only the co-authors of our co-authors that are also our co-authors (this is getting tricky…). You could leave the co-authors of your co-authors that you have not publish with, but that can make the graph quite big and not useful for plotting. After filtering we create a new variable with the joint string between co-author and author, so that we can count how many times that joint happens.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;author_df&amp;lt;-author_df[author_df$co_authors%in%author_df$author,]%&amp;gt;%
+  mutate(co_edge=paste(co_authors, author, sep = &amp;#39;_&amp;#39;))%&amp;gt;%
+  group_by(co_edge)%&amp;gt;%
+  summarise(count=n())%&amp;gt;%
+  separate(co_edge, c(&amp;#39;co_authors&amp;#39;,&amp;#39;author&amp;#39;),sep = &amp;#39;_&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We are ready to create the graph from the data frame. We specify the weight of the edges (using &lt;em&gt;E&lt;/em&gt;) as the count of the times two authors published together. Note that in our count data ‘author 1-author 2’ counts different than ‘author 2-author 1’ for the same paper, so we are counting each article twice. That is not a problem since we are considering a undirected graph. We just need to remember that we will be representing each article 2 times. I did not care because graphically does not matter. Finally, we plot the graph (very rough!)&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;author_g&amp;lt;-graph_from_data_frame(author_df,directed = F)
+E(author_g)$weight&amp;lt;-author_df$count
+author_g&amp;lt;-simplify(author_g)
+plot(author_g,edge.width = E(author_g)$weight)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/network-coauthors/network_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Last step is to make the graph pretty and play with the parameters. I find &lt;strong&gt;visNetwork&lt;/strong&gt; package an amazing tool, so I recommend you explore it if you use networks.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;vis_g&amp;lt;-toVisNetworkData(author_g) #coverts the igraph object to visNetwork
+vis_g$edges$value&amp;lt;-vis_g$edges$weight #specify the values for eadges as the weights (number of papers for pairs)
+
+#vis_g$nodes$title&amp;lt;-co_authors_abel$author_name #name of the nodes
+
+#plot the network  
+visNetwork(nodes = vis_g$nodes, edges = vis_g$edges, height = &amp;quot;300px&amp;quot;, width = &amp;#39;300px&amp;#39;)%&amp;gt;%
+  visNodes(size = 10, shape=&amp;#39;cicle&amp;#39;, mass=2,font=list(color=&amp;#39;white&amp;#39;),fixed = F) %&amp;gt;%
+  visEdges(length = 10,physics = T, smooth = list(enabled=T))%&amp;gt;%
+  visLayout(randomSeed = 666)%&amp;gt;%
+  visOptions(highlightNearest = list(hover = T), 
+             nodesIdSelection = list(enabled = TRUE))%&amp;gt;%
+  visPhysics(stabilization = T, minVelocity = 10, maxVelocity = 25)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;htmlwidget-1&#34; style=&#34;width:300px;height:300px;&#34; class=&#34;visNetwork html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1&#34;&gt;{&#34;x&#34;:{&#34;nodes&#34;:{&#34;id&#34;:[&#34;Allodi I&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Arbat-Plana A&#34;,&#34;Auladell C&#34;,&#34;Batty NJ&#34;,&#34;Beaudry E&#34;,&#34;Bennett DJ&#34;,&#34;Biernaskie J&#34;,&#34;Bixby JL&#34;,&#34;Bufler P&#34;,&#34;Callahan A&#34;,&#34;Carulla P&#34;,&#34;Coll-Miro M&#34;,&#34;Corona-Quintanilla DL&#34;,&#34;Dahlby J&#34;,&#34;del Rio JA&#34;,&#34;del Valle J&#34;,&#34;Dinarello CA&#34;,&#34;Duque D&#34;,&#34;Edel MJ&#34;,&#34;Fenrich K&#34;,&#34;Fenrich KK&#34;,&#34;Ferguson AR&#34;,&#34;Forero J&#34;,&#34;Fores J&#34;,&#34;Fouad K&#34;,&#34;Francos-Quijorna I&#34;,&#34;Fuhrmann T&#34;,&#34;Garcia-Alias G&#34;,&#34;Gasull X&#34;,&#34;Gavin R&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez F&#34;,&#34;Grethe JS&#34;,&#34;Hernandez J&#34;,&#34;Jakeman LB&#34;,&#34;Junyent F&#34;,&#34;Kigerl KA&#34;,&#34;Krajacic A&#34;,&#34;Lemmon VP&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Vales R&#34;,&#34;Lucas-Osma AM&#34;,&#34;Madsen KL&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Matamoros-Angles A&#34;,&#34;May Z&#34;,&#34;Moreno-Flores MT&#34;,&#34;Navarro X&#34;,&#34;Nielson JL&#34;,&#34;Nocentini S&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Redondo-Castro E&#34;,&#34;Reginensi D&#34;,&#34;Requena J&#34;,&#34;Romero R&#34;,&#34;Samitier J&#34;,&#34;Santos-Nogueira E&#34;,&#34;Santos D&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Schwab JM&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Udina E&#34;,&#34;Utrera J&#34;,&#34;Vallejo C&#34;,&#34;Vavrek R&#34;,&#34;Wandosell F&#34;],&#34;label&#34;:[&#34;Allodi I&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Arbat-Plana A&#34;,&#34;Auladell C&#34;,&#34;Batty NJ&#34;,&#34;Beaudry E&#34;,&#34;Bennett DJ&#34;,&#34;Biernaskie J&#34;,&#34;Bixby JL&#34;,&#34;Bufler P&#34;,&#34;Callahan A&#34;,&#34;Carulla P&#34;,&#34;Coll-Miro M&#34;,&#34;Corona-Quintanilla DL&#34;,&#34;Dahlby J&#34;,&#34;del Rio JA&#34;,&#34;del Valle J&#34;,&#34;Dinarello CA&#34;,&#34;Duque D&#34;,&#34;Edel MJ&#34;,&#34;Fenrich K&#34;,&#34;Fenrich KK&#34;,&#34;Ferguson AR&#34;,&#34;Forero J&#34;,&#34;Fores J&#34;,&#34;Fouad K&#34;,&#34;Francos-Quijorna I&#34;,&#34;Fuhrmann T&#34;,&#34;Garcia-Alias G&#34;,&#34;Gasull X&#34;,&#34;Gavin R&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez F&#34;,&#34;Grethe JS&#34;,&#34;Hernandez J&#34;,&#34;Jakeman LB&#34;,&#34;Junyent F&#34;,&#34;Kigerl KA&#34;,&#34;Krajacic A&#34;,&#34;Lemmon VP&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Vales R&#34;,&#34;Lucas-Osma AM&#34;,&#34;Madsen KL&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Matamoros-Angles A&#34;,&#34;May Z&#34;,&#34;Moreno-Flores MT&#34;,&#34;Navarro X&#34;,&#34;Nielson JL&#34;,&#34;Nocentini S&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Redondo-Castro E&#34;,&#34;Reginensi D&#34;,&#34;Requena J&#34;,&#34;Romero R&#34;,&#34;Samitier J&#34;,&#34;Santos-Nogueira E&#34;,&#34;Santos D&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Schwab JM&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Udina E&#34;,&#34;Utrera J&#34;,&#34;Vallejo C&#34;,&#34;Vavrek R&#34;,&#34;Wandosell F&#34;]},&#34;edges&#34;:{&#34;from&#34;:[&#34;Allodi I&#34;,&#34;Allodi I&#34;,&#34;Allodi I&#34;,&#34;Allodi I&#34;,&#34;Allodi I&#34;,&#34;Allodi I&#34;,&#34;Allodi I&#34;,&#34;Allodi I&#34;,&#34;Allodi I&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Alvarez-Palomo AB&#34;,&#34;Arbat-Plana A&#34;,&#34;Arbat-Plana A&#34;,&#34;Arbat-Plana A&#34;,&#34;Auladell C&#34;,&#34;Auladell C&#34;,&#34;Auladell C&#34;,&#34;Auladell C&#34;,&#34;Auladell C&#34;,&#34;Auladell C&#34;,&#34;Auladell C&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Batty NJ&#34;,&#34;Beaudry E&#34;,&#34;Beaudry E&#34;,&#34;Beaudry E&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Bennett DJ&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Biernaskie J&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bixby JL&#34;,&#34;Bufler P&#34;,&#34;Bufler P&#34;,&#34;Bufler P&#34;,&#34;Bufler P&#34;,&#34;Bufler P&#34;,&#34;Bufler P&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Callahan A&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Carulla P&#34;,&#34;Coll-Miro M&#34;,&#34;Coll-Miro M&#34;,&#34;Coll-Miro M&#34;,&#34;Coll-Miro M&#34;,&#34;Coll-Miro M&#34;,&#34;Coll-Miro M&#34;,&#34;Corona-Quintanilla DL&#34;,&#34;Corona-Quintanilla DL&#34;,&#34;Corona-Quintanilla DL&#34;,&#34;Corona-Quintanilla DL&#34;,&#34;Corona-Quintanilla DL&#34;,&#34;Dahlby J&#34;,&#34;Dahlby J&#34;,&#34;Dahlby J&#34;,&#34;Dahlby J&#34;,&#34;Dahlby J&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Rio JA&#34;,&#34;del Valle J&#34;,&#34;del Valle J&#34;,&#34;del Valle J&#34;,&#34;del Valle J&#34;,&#34;del Valle J&#34;,&#34;del Valle J&#34;,&#34;del Valle J&#34;,&#34;del Valle J&#34;,&#34;Dinarello CA&#34;,&#34;Dinarello CA&#34;,&#34;Dinarello CA&#34;,&#34;Dinarello CA&#34;,&#34;Dinarello CA&#34;,&#34;Duque D&#34;,&#34;Duque D&#34;,&#34;Duque D&#34;,&#34;Duque D&#34;,&#34;Duque D&#34;,&#34;Edel MJ&#34;,&#34;Edel MJ&#34;,&#34;Edel MJ&#34;,&#34;Edel MJ&#34;,&#34;Edel MJ&#34;,&#34;Edel MJ&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich K&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Fenrich KK&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Ferguson AR&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Forero J&#34;,&#34;Fores J&#34;,&#34;Fores J&#34;,&#34;Fores J&#34;,&#34;Fores J&#34;,&#34;Fores J&#34;,&#34;Fores J&#34;,&#34;Fores J&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Fouad K&#34;,&#34;Francos-Quijorna I&#34;,&#34;Francos-Quijorna I&#34;,&#34;Francos-Quijorna I&#34;,&#34;Francos-Quijorna I&#34;,&#34;Francos-Quijorna I&#34;,&#34;Francos-Quijorna I&#34;,&#34;Fuhrmann T&#34;,&#34;Fuhrmann T&#34;,&#34;Fuhrmann T&#34;,&#34;Fuhrmann T&#34;,&#34;Fuhrmann T&#34;,&#34;Fuhrmann T&#34;,&#34;Fuhrmann T&#34;,&#34;Garcia-Alias G&#34;,&#34;Garcia-Alias G&#34;,&#34;Garcia-Alias G&#34;,&#34;Garcia-Alias G&#34;,&#34;Garcia-Alias G&#34;,&#34;Garcia-Alias G&#34;,&#34;Gasull X&#34;,&#34;Gasull X&#34;,&#34;Gasull X&#34;,&#34;Gasull X&#34;,&#34;Gasull X&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gavin R&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez F&#34;,&#34;Gonzalez F&#34;,&#34;Gonzalez F&#34;,&#34;Gonzalez F&#34;,&#34;Grethe JS&#34;,&#34;Grethe JS&#34;,&#34;Grethe JS&#34;,&#34;Grethe JS&#34;,&#34;Grethe JS&#34;,&#34;Grethe JS&#34;,&#34;Grethe JS&#34;,&#34;Grethe JS&#34;,&#34;Grethe JS&#34;,&#34;Hernandez J&#34;,&#34;Hernandez J&#34;,&#34;Hernandez J&#34;,&#34;Hernandez J&#34;,&#34;Hernandez J&#34;,&#34;Hernandez J&#34;,&#34;Hernandez J&#34;,&#34;Hernandez J&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Jakeman LB&#34;,&#34;Junyent F&#34;,&#34;Junyent F&#34;,&#34;Junyent F&#34;,&#34;Junyent F&#34;,&#34;Kigerl KA&#34;,&#34;Kigerl KA&#34;,&#34;Kigerl KA&#34;,&#34;Kigerl KA&#34;,&#34;Kigerl KA&#34;,&#34;Kigerl KA&#34;,&#34;Kigerl KA&#34;,&#34;Krajacic A&#34;,&#34;Krajacic A&#34;,&#34;Krajacic A&#34;,&#34;Krajacic A&#34;,&#34;Krajacic A&#34;,&#34;Krajacic A&#34;,&#34;Krajacic A&#34;,&#34;Lemmon VP&#34;,&#34;Lemmon VP&#34;,&#34;Lemmon VP&#34;,&#34;Lemmon VP&#34;,&#34;Lemmon VP&#34;,&#34;Lemmon VP&#34;,&#34;Lemmon VP&#34;,&#34;Lemmon VP&#34;,&#34;Lemmon VP&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Vales R&#34;,&#34;Lopez-Vales R&#34;,&#34;Lopez-Vales R&#34;,&#34;Lopez-Vales R&#34;,&#34;Lopez-Vales R&#34;,&#34;Lucas-Osma AM&#34;,&#34;Lucas-Osma AM&#34;,&#34;Lucas-Osma AM&#34;,&#34;Lucas-Osma AM&#34;,&#34;Lucas-Osma AM&#34;,&#34;Lucas-Osma AM&#34;,&#34;Lucas-Osma AM&#34;,&#34;Lucas-Osma AM&#34;,&#34;Madsen KL&#34;,&#34;Madsen KL&#34;,&#34;Madsen KL&#34;,&#34;Madsen KL&#34;,&#34;Madsen KL&#34;,&#34;Madsen KL&#34;,&#34;Magnuson DSK&#34;,&#34;Magnuson DSK&#34;,&#34;Magnuson DSK&#34;,&#34;Magnuson DSK&#34;,&#34;Magnuson DSK&#34;,&#34;Magnuson DSK&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Martone ME&#34;,&#34;Martone ME&#34;,&#34;Martone ME&#34;,&#34;Martone ME&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Matamoros-Angles A&#34;,&#34;May Z&#34;,&#34;May Z&#34;,&#34;May Z&#34;,&#34;May Z&#34;,&#34;May Z&#34;,&#34;Moreno-Flores MT&#34;,&#34;Moreno-Flores MT&#34;,&#34;Moreno-Flores MT&#34;,&#34;Moreno-Flores MT&#34;,&#34;Moreno-Flores MT&#34;,&#34;Moreno-Flores MT&#34;,&#34;Moreno-Flores MT&#34;,&#34;Moreno-Flores MT&#34;,&#34;Moreno-Flores MT&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Navarro X&#34;,&#34;Nielson JL&#34;,&#34;Nielson JL&#34;,&#34;Nielson JL&#34;,&#34;Nielson JL&#34;,&#34;Nielson JL&#34;,&#34;Nocentini S&#34;,&#34;Nocentini S&#34;,&#34;Nocentini S&#34;,&#34;Nocentini S&#34;,&#34;Nocentini S&#34;,&#34;Nocentini S&#34;,&#34;Nocentini S&#34;,&#34;Popovich PG&#34;,&#34;Popovich PG&#34;,&#34;Popovich PG&#34;,&#34;Popovich PG&#34;,&#34;Popovich PG&#34;,&#34;Popovich PG&#34;,&#34;Popovich PG&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Raposo P&#34;,&#34;Raposo P&#34;,&#34;Raposo P&#34;,&#34;Raposo P&#34;,&#34;Raposo P&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Raposo PJF&#34;,&#34;Raposo PJF&#34;,&#34;Redondo-Castro E&#34;,&#34;Redondo-Castro E&#34;,&#34;Redondo-Castro E&#34;,&#34;Redondo-Castro E&#34;,&#34;Redondo-Castro E&#34;,&#34;Reginensi D&#34;,&#34;Reginensi D&#34;,&#34;Reginensi D&#34;,&#34;Reginensi D&#34;,&#34;Reginensi D&#34;,&#34;Reginensi D&#34;,&#34;Requena J&#34;,&#34;Romero R&#34;,&#34;Romero R&#34;,&#34;Romero R&#34;,&#34;Samitier J&#34;,&#34;Samitier J&#34;,&#34;Samitier J&#34;,&#34;Samitier J&#34;,&#34;Samitier J&#34;,&#34;Santos-Nogueira E&#34;,&#34;Santos-Nogueira E&#34;,&#34;Santos-Nogueira E&#34;,&#34;Santos D&#34;,&#34;Santos D&#34;,&#34;Schmidt E&#34;,&#34;Schmidt E&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Schwab JM&#34;,&#34;Schwab JM&#34;,&#34;Schwab JM&#34;,&#34;Seira O&#34;,&#34;Seira O&#34;,&#34;Seira O&#34;,&#34;Seira O&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Serra-Picamal X&#34;,&#34;Serra-Picamal X&#34;,&#34;Shoichet M&#34;,&#34;Shoichet M&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Taylor-Burds C&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Torres-Espin A&#34;,&#34;Torres-Espin A&#34;,&#34;Torres-Espin A&#34;,&#34;Torres-Espin A&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;],&#34;to&#34;:[&#34;Corona-Quintanilla DL&#34;,&#34;Fores J&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez F&#34;,&#34;Hernandez J&#34;,&#34;Navarro X&#34;,&#34;Santos-Nogueira E&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Edel MJ&#34;,&#34;Gasull X&#34;,&#34;Hernandez J&#34;,&#34;Lopez-Serrano C&#34;,&#34;Navarro X&#34;,&#34;Requena J&#34;,&#34;Torres-Espin A&#34;,&#34;Navarro X&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;del Rio JA&#34;,&#34;Duque D&#34;,&#34;Junyent F&#34;,&#34;Redondo-Castro E&#34;,&#34;Romero R&#34;,&#34;Torres-Espin A&#34;,&#34;Utrera J&#34;,&#34;Biernaskie J&#34;,&#34;Dahlby J&#34;,&#34;Fenrich K&#34;,&#34;Fenrich KK&#34;,&#34;Fouad K&#34;,&#34;Fuhrmann T&#34;,&#34;Lucas-Osma AM&#34;,&#34;May Z&#34;,&#34;Raposo P&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Fenrich K&#34;,&#34;Fouad K&#34;,&#34;Torres-Espin A&#34;,&#34;Fenrich K&#34;,&#34;Fenrich KK&#34;,&#34;Forero J&#34;,&#34;Fouad K&#34;,&#34;Krajacic A&#34;,&#34;Lucas-Osma AM&#34;,&#34;May Z&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Schmidt E&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Fenrich K&#34;,&#34;Fenrich KK&#34;,&#34;Forero J&#34;,&#34;Fouad K&#34;,&#34;Fuhrmann T&#34;,&#34;Lucas-Osma AM&#34;,&#34;May Z&#34;,&#34;Raposo P&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Callahan A&#34;,&#34;del Rio JA&#34;,&#34;Ferguson AR&#34;,&#34;Fouad K&#34;,&#34;Grethe JS&#34;,&#34;Jakeman LB&#34;,&#34;Lemmon VP&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Matamoros-Angles A&#34;,&#34;Nielson JL&#34;,&#34;Popovich PG&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Coll-Miro M&#34;,&#34;Dinarello CA&#34;,&#34;Francos-Quijorna I&#34;,&#34;Lopez-Vales R&#34;,&#34;Santos-Nogueira E&#34;,&#34;Torres-Espin A&#34;,&#34;Ferguson AR&#34;,&#34;Fouad K&#34;,&#34;Grethe JS&#34;,&#34;Jakeman LB&#34;,&#34;Lemmon VP&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Nielson JL&#34;,&#34;Popovich PG&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;del Rio JA&#34;,&#34;Gavin R&#34;,&#34;Matamoros-Angles A&#34;,&#34;Moreno-Flores MT&#34;,&#34;Navarro X&#34;,&#34;Nocentini S&#34;,&#34;Reginensi D&#34;,&#34;Samitier J&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Dinarello CA&#34;,&#34;Francos-Quijorna I&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Vales R&#34;,&#34;Santos-Nogueira E&#34;,&#34;Torres-Espin A&#34;,&#34;Fores J&#34;,&#34;Gonzalez F&#34;,&#34;Navarro X&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Fenrich K&#34;,&#34;Fenrich KK&#34;,&#34;Fouad K&#34;,&#34;May Z&#34;,&#34;Torres-Espin A&#34;,&#34;Gavin R&#34;,&#34;Lemmon VP&#34;,&#34;Matamoros-Angles A&#34;,&#34;Moreno-Flores MT&#34;,&#34;Navarro X&#34;,&#34;Nocentini S&#34;,&#34;Reginensi D&#34;,&#34;Samitier J&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez F&#34;,&#34;Junyent F&#34;,&#34;Navarro X&#34;,&#34;Requena J&#34;,&#34;Santos D&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Fouad K&#34;,&#34;Francos-Quijorna I&#34;,&#34;Lopez-Vales R&#34;,&#34;Santos-Nogueira E&#34;,&#34;Torres-Espin A&#34;,&#34;Junyent F&#34;,&#34;Redondo-Castro E&#34;,&#34;Romero R&#34;,&#34;Torres-Espin A&#34;,&#34;Utrera J&#34;,&#34;Gasull X&#34;,&#34;Hernandez J&#34;,&#34;Lopez-Serrano C&#34;,&#34;Navarro X&#34;,&#34;Requena J&#34;,&#34;Torres-Espin A&#34;,&#34;Fenrich KK&#34;,&#34;Forero J&#34;,&#34;Fouad K&#34;,&#34;Fuhrmann T&#34;,&#34;Kigerl KA&#34;,&#34;Krajacic A&#34;,&#34;Lucas-Osma AM&#34;,&#34;Madsen KL&#34;,&#34;May Z&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Forero J&#34;,&#34;Fouad K&#34;,&#34;Fuhrmann T&#34;,&#34;Kigerl KA&#34;,&#34;Krajacic A&#34;,&#34;Lucas-Osma AM&#34;,&#34;Madsen KL&#34;,&#34;May Z&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Fouad K&#34;,&#34;Grethe JS&#34;,&#34;Jakeman LB&#34;,&#34;Lemmon VP&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Nielson JL&#34;,&#34;Popovich PG&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Fouad K&#34;,&#34;Krajacic A&#34;,&#34;Lucas-Osma AM&#34;,&#34;May Z&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Shoichet M&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Garcia-Alias G&#34;,&#34;Gonzalez-Perez F&#34;,&#34;Gonzalez F&#34;,&#34;Lopez-Vales R&#34;,&#34;Navarro X&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Fuhrmann T&#34;,&#34;Grethe JS&#34;,&#34;Jakeman LB&#34;,&#34;Kigerl KA&#34;,&#34;Krajacic A&#34;,&#34;Lemmon VP&#34;,&#34;Lucas-Osma AM&#34;,&#34;Madsen KL&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;May Z&#34;,&#34;Nielson JL&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Schwab JM&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Vavrek R&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Vales R&#34;,&#34;Navarro X&#34;,&#34;Santos-Nogueira E&#34;,&#34;Schwab JM&#34;,&#34;Torres-Espin A&#34;,&#34;Lucas-Osma AM&#34;,&#34;May Z&#34;,&#34;Raposo P&#34;,&#34;Schmidt E&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Torres-Espin A&#34;,&#34;Lopez-Vales R&#34;,&#34;Navarro X&#34;,&#34;Redondo-Castro E&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Vallejo C&#34;,&#34;Hernandez J&#34;,&#34;Lopez-Serrano C&#34;,&#34;Navarro X&#34;,&#34;Requena J&#34;,&#34;Torres-Espin A&#34;,&#34;Matamoros-Angles A&#34;,&#34;Moreno-Flores MT&#34;,&#34;Navarro X&#34;,&#34;Nocentini S&#34;,&#34;Reginensi D&#34;,&#34;Requena J&#34;,&#34;Samitier J&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Hernandez J&#34;,&#34;Navarro X&#34;,&#34;Santos-Nogueira E&#34;,&#34;Santos D&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Navarro X&#34;,&#34;Romero R&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Jakeman LB&#34;,&#34;Lemmon VP&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Nielson JL&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Lopez-Serrano C&#34;,&#34;Lopez-Vales R&#34;,&#34;Navarro X&#34;,&#34;Redondo-Castro E&#34;,&#34;Requena J&#34;,&#34;Santos-Nogueira E&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Kigerl KA&#34;,&#34;Lemmon VP&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Nielson JL&#34;,&#34;Popovich PG&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Redondo-Castro E&#34;,&#34;Romero R&#34;,&#34;Torres-Espin A&#34;,&#34;Utrera J&#34;,&#34;Madsen KL&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Torres-Espin A&#34;,&#34;Lucas-Osma AM&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Schmidt E&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Magnuson DSK&#34;,&#34;Martone ME&#34;,&#34;Matamoros-Angles A&#34;,&#34;Nielson JL&#34;,&#34;Popovich PG&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Lopez-Vales R&#34;,&#34;Navarro X&#34;,&#34;Requena J&#34;,&#34;Santos-Nogueira E&#34;,&#34;Torres-Espin A&#34;,&#34;Navarro X&#34;,&#34;Santos-Nogueira E&#34;,&#34;Schwab JM&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;May Z&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Schmidt E&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Popovich PG&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Torres-Espin A&#34;,&#34;Martone ME&#34;,&#34;May Z&#34;,&#34;Nielson JL&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Nielson JL&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Moreno-Flores MT&#34;,&#34;Navarro X&#34;,&#34;Nocentini S&#34;,&#34;Reginensi D&#34;,&#34;Samitier J&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Raposo P&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Navarro X&#34;,&#34;Nocentini S&#34;,&#34;Reginensi D&#34;,&#34;Samitier J&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Nocentini S&#34;,&#34;Redondo-Castro E&#34;,&#34;Reginensi D&#34;,&#34;Requena J&#34;,&#34;Samitier J&#34;,&#34;Santos-Nogueira E&#34;,&#34;Santos D&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Udina E&#34;,&#34;Vallejo C&#34;,&#34;Wandosell F&#34;,&#34;Popovich PG&#34;,&#34;Schwab JM&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Reginensi D&#34;,&#34;Samitier J&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Raposo P&#34;,&#34;Raposo PJF&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Schwab JM&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Raposo PJF&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Shoichet M&#34;,&#34;Stykel MG&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Schmidt E&#34;,&#34;Schmidt EKA&#34;,&#34;Torres-Espin A&#34;,&#34;Romero R&#34;,&#34;Santos-Nogueira E&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Utrera J&#34;,&#34;Samitier J&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Torres-Espin A&#34;,&#34;Schmidt E&#34;,&#34;Torres-Espin A&#34;,&#34;Utrera J&#34;,&#34;Seira O&#34;,&#34;Serra-Picamal X&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Schwab JM&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Torres-Espin A&#34;,&#34;Udina E&#34;,&#34;Schmidt EKA&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Torres-Espin A&#34;,&#34;Taylor-Burds C&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Serra-Picamal X&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Torres-Espin A&#34;,&#34;Trepat X&#34;,&#34;Wandosell F&#34;,&#34;Stykel MG&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Torres-Espin A&#34;,&#34;Tetzlaff W&#34;,&#34;Torres-Espin A&#34;,&#34;Torres-Espin A&#34;,&#34;Vavrek R&#34;,&#34;Trepat X&#34;,&#34;Udina E&#34;,&#34;Utrera J&#34;,&#34;Vallejo C&#34;,&#34;Vavrek R&#34;,&#34;Wandosell F&#34;,&#34;Wandosell F&#34;],&#34;weight&#34;:[2,2,4,1,1,14,2,2,14,8,2,1,2,2,7,2,10,2,10,7,4,52,2,12,2,18,2,2,3,6,8,2,2,4,4,2,2,6,2,2,2,2,7,14,4,30,2,10,6,2,2,2,2,4,12,3,2,2,6,2,2,6,2,4,12,12,2,7,3,8,4,2,4,102,2,2,2,4,8,5,2,2,2,2,50,2,4,2,2,7,4,2,4,7,2,2,4,5,4,2,2,2,9,6,4,4,2,4,4,2,2,2,2,4,4,2,4,2,4,4,2,2,1,2,2,2,1,2,2,2,2,40,1,6,4,2,9,6,5,6,2,2,4,9,4,1,1,21,1,7,2,1,2,2,6,2,2,4,2,2,2,4,2,1,2,2,12,2,27,7,19,1,1,1,6,1,6,2,2,1,1,2,2,1,2,8,2,6,26,2,2,2,12,2,8,4,5,2,4,4,2,2,12,4,4,2,8,8,2,4,34,8,7,2,6,2,14,2,2,4,2,2,3,2,1,2,6,2,20,2,1,24,48,2,4,2,2,4,2,10,4,12,2,4,2,20,4,6,7,2,4,4,4,4,2,2,20,18,2,28,2,14,8,8,2,2,2,2,2,2,8,2,2,18,28,6,4,2,2,1,2,2,2,2,6,2,2,2,2,3,6,4,2,2,2,8,2,26,2,5,2,18,1,1,1,1,2,2,2,42,2,2,2,2,2,2,1,9,3,1,1,5,3,2,4,2,2,4,16,8,2,4,2,2,10,2,18,2,40,1,2,1,2,2,2,2,2,2,4,2,2,2,2,2,4,8,5,2,2,2,4,2,2,4,2,34,10,2,2,2,2,2,4,2,2,2,4,4,2,1,2,1,2,2,2,2,2,2,2,2,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,4,6,2,4,4,2,2,2,2,4,36,2,18,2,2,2,10,13,2,2,22,2,92,4,2,4,4,2,2,2,6,2,2,2,2,4,4,3,2,3,2,5,2,4,2,1,2,1,2,2,7,4,1,2,2,1,1,8,1,2,2,2,2,2,4,4,2,1,1,8,2,2,2,2,2,2,2,2,1,2,3,4,2,4,2,4,2,2,2,2,2,2,2,22,2,2,2,2,2,2,2,2,4,2,4,2,2,4,2,4],&#34;value&#34;:[2,2,4,1,1,14,2,2,14,8,2,1,2,2,7,2,10,2,10,7,4,52,2,12,2,18,2,2,3,6,8,2,2,4,4,2,2,6,2,2,2,2,7,14,4,30,2,10,6,2,2,2,2,4,12,3,2,2,6,2,2,6,2,4,12,12,2,7,3,8,4,2,4,102,2,2,2,4,8,5,2,2,2,2,50,2,4,2,2,7,4,2,4,7,2,2,4,5,4,2,2,2,9,6,4,4,2,4,4,2,2,2,2,4,4,2,4,2,4,4,2,2,1,2,2,2,1,2,2,2,2,40,1,6,4,2,9,6,5,6,2,2,4,9,4,1,1,21,1,7,2,1,2,2,6,2,2,4,2,2,2,4,2,1,2,2,12,2,27,7,19,1,1,1,6,1,6,2,2,1,1,2,2,1,2,8,2,6,26,2,2,2,12,2,8,4,5,2,4,4,2,2,12,4,4,2,8,8,2,4,34,8,7,2,6,2,14,2,2,4,2,2,3,2,1,2,6,2,20,2,1,24,48,2,4,2,2,4,2,10,4,12,2,4,2,20,4,6,7,2,4,4,4,4,2,2,20,18,2,28,2,14,8,8,2,2,2,2,2,2,8,2,2,18,28,6,4,2,2,1,2,2,2,2,6,2,2,2,2,3,6,4,2,2,2,8,2,26,2,5,2,18,1,1,1,1,2,2,2,42,2,2,2,2,2,2,1,9,3,1,1,5,3,2,4,2,2,4,16,8,2,4,2,2,10,2,18,2,40,1,2,1,2,2,2,2,2,2,4,2,2,2,2,2,4,8,5,2,2,2,4,2,2,4,2,34,10,2,2,2,2,2,4,2,2,2,4,4,2,1,2,1,2,2,2,2,2,2,2,2,2,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,2,4,6,2,4,4,2,2,2,2,4,36,2,18,2,2,2,10,13,2,2,22,2,92,4,2,4,4,2,2,2,6,2,2,2,2,4,4,3,2,3,2,5,2,4,2,1,2,1,2,2,7,4,1,2,2,1,1,8,1,2,2,2,2,2,4,4,2,1,1,8,2,2,2,2,2,2,2,2,1,2,3,4,2,4,2,4,2,2,2,2,2,2,2,22,2,2,2,2,2,2,2,2,4,2,4,2,2,4,2,4]},&#34;nodesToDataframe&#34;:true,&#34;edgesToDataframe&#34;:true,&#34;options&#34;:{&#34;width&#34;:&#34;100%&#34;,&#34;height&#34;:&#34;100%&#34;,&#34;nodes&#34;:{&#34;shape&#34;:&#34;cicle&#34;,&#34;size&#34;:10,&#34;mass&#34;:2,&#34;fixed&#34;:false,&#34;font&#34;:{&#34;color&#34;:&#34;white&#34;}},&#34;manipulation&#34;:{&#34;enabled&#34;:false},&#34;edges&#34;:{&#34;length&#34;:10,&#34;physics&#34;:true,&#34;smooth&#34;:{&#34;enabled&#34;:true}},&#34;layout&#34;:{&#34;randomSeed&#34;:666},&#34;interaction&#34;:{&#34;hover&#34;:true},&#34;physics&#34;:{&#34;maxVelocity&#34;:25,&#34;minVelocity&#34;:10,&#34;stabilization&#34;:true}},&#34;groups&#34;:null,&#34;width&#34;:&#34;300px&#34;,&#34;height&#34;:&#34;300px&#34;,&#34;idselection&#34;:{&#34;enabled&#34;:true,&#34;style&#34;:&#34;width: 150px; height: 26px&#34;,&#34;useLabels&#34;:true,&#34;main&#34;:&#34;Select by id&#34;},&#34;byselection&#34;:{&#34;enabled&#34;:false,&#34;style&#34;:&#34;width: 150px; height: 26px&#34;,&#34;multiple&#34;:false,&#34;hideColor&#34;:&#34;rgba(200,200,200,0.5)&#34;},&#34;main&#34;:null,&#34;submain&#34;:null,&#34;footer&#34;:null,&#34;background&#34;:&#34;rgba(0, 0, 0, 0)&#34;,&#34;tooltipStay&#34;:300,&#34;tooltipStyle&#34;:&#34;position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);&#34;,&#34;highlight&#34;:{&#34;enabled&#34;:false,&#34;hoverNearest&#34;:true,&#34;degree&#34;:1,&#34;algorithm&#34;:&#34;all&#34;,&#34;hideColor&#34;:&#34;rgba(200,200,200,0.5)&#34;,&#34;labelOnly&#34;:true},&#34;collapse&#34;:{&#34;enabled&#34;:false,&#34;fit&#34;:false,&#34;resetHighlight&#34;:true,&#34;clusterOptions&#34;:null,&#34;keepCoord&#34;:true,&#34;labelSuffix&#34;:&#34;(cluster)&#34;}},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;p&gt;DONE!&lt;/p&gt;
+&lt;p&gt;Now you can save the network as html using the &lt;em&gt;visSave&lt;/em&gt; function. For the network in my co-authors section, I did some extra processing steps to consider that some times same author might publish with slightly different names. I also added some groups and colors. I would let you be creative.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Reproducing Schotter in R</title>
+      <link>/post/schotter/schotter/</link>
+      <pubDate>Wed, 01 Jan 2020 21:13:14 -0500</pubDate>
+      <guid>/post/schotter/schotter/</guid>
+      <description>
+
+
+&lt;p&gt;I have been captivated by creative coding and generative art for a while. After discovering some of the work by &lt;a href=&#34;https://twitter.com/aschinchon&#34;&gt;Antonio S.Chinchón&lt;/a&gt; and his blog &lt;a href=&#34;https://fronkonstin.com/&#34;&gt;Fronkonstin&lt;/a&gt; on using R and mathematics to create amazing art work, I decided to play around. &lt;a href=&#34;http://www.medienkunstnetz.de/works/schotter/&#34;&gt;Schotter&lt;/a&gt; (1968) is a famous piece by &lt;a href=&#34;https://en.wikipedia.org/wiki/Georg_Nees&#34;&gt;Georg Nees&lt;/a&gt;, a pioneer in computer graphics and probably one of the first creative coders.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.medienkunstnetz.de/works/schotter/&#34;&gt;&lt;strong&gt;CHECK THE ORIGINAL NOW&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;To pay tribute to Georg, I decided to implement a chunk of code that would reproduce Schotter using R. There are probably several ways to code this algorithm and I am sure several people have done this before. My goal was to see if my current R knowledge could be use to program Schotter without checking other implementations and learn something on the way.&lt;/p&gt;
+&lt;p&gt;Here my thought process.&lt;/p&gt;
+&lt;div id=&#34;the-libraries&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The libraries&lt;/h2&gt;
+&lt;p&gt;Nowadays I use &lt;a href=&#34;https://ggplot2.tidyverse.org/&#34;&gt;ggplot2&lt;/a&gt; for every visualization, so I decided to utilize its amazing graphical powers. I also used &lt;a href=&#34;https://dplyr.tidyverse.org/&#34;&gt;dplyr&lt;/a&gt; although we could easily not use it here.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+library(dplyr)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;building-a-square&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Building a square&lt;/h2&gt;
+&lt;p&gt;The easiest way to build a square in ggplot2 is probably using &lt;em&gt;geom_rect&lt;/em&gt;, however I did not find a way to rotate the geometry, so I decided to go for a polygon (&lt;em&gt;geom_polygon&lt;/em&gt;) and control the position of the 4 vertices outside ggplot. For that I created the following function:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;square&amp;lt;-function(x0=1,y0=1, size=1, angle=0){
+  xor&amp;lt;-x0+size/2 #X origin (center of the square)
+  yor&amp;lt;-y0+size/2 #Y origin (center of the square)
+  
+  tibble(
+    x=c(x0,x0+size,x0+size,x0),
+    y=c(y0,y0,y0+size,y0+size)
+  )%&amp;gt;%mutate(x2=(x-xor)*cos(angle)-(y-yor)*sin(angle)+xor, #For rotation
+             y2=(x-xor)*sin(angle)+(y-yor)*cos(angle)+yor) #for rotation
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Where &lt;strong&gt;x0&lt;/strong&gt; and &lt;strong&gt;y0&lt;/strong&gt; control the position of lower left (or other depending on the axis orientation) vertex, size the length of the sides and angle the amount of rotation from the original position. An &lt;strong&gt;x&lt;/strong&gt; and &lt;strong&gt;y&lt;/strong&gt; for each vertex is set as a template relative to &lt;strong&gt;x0&lt;/strong&gt;, &lt;strong&gt;y0&lt;/strong&gt; and size. In this way, we will be able to control the position of the square in the canvas. &lt;strong&gt;x2&lt;/strong&gt; and &lt;strong&gt;y2&lt;/strong&gt; are set as the rotated coordinates for &lt;strong&gt;x&lt;/strong&gt; and &lt;strong&gt;y&lt;/strong&gt;, respectively. Ultimately, we will use &lt;strong&gt;x2&lt;/strong&gt; and &lt;strong&gt;y2&lt;/strong&gt;, that will be equal to &lt;strong&gt;x&lt;/strong&gt; and &lt;strong&gt;y&lt;/strong&gt; if angle is 0. I decided to generate new columns for the rotations so I can plot both, the original x, y and the rotated (I confess I had to brush up my trigonometry and google a few things for this).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(square())+
+  geom_polygon(aes(x=x, y=y))+
+  coord_fixed()# just so that axis are equally spaced&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We have our first square!! We can now play with fill and color&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(square())+
+  geom_polygon(aes(x=x, y=y), fill=NA, color=&amp;#39;black&amp;#39;)+
+  coord_fixed()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Let’s play with some parameters&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(square(size=2,angle=pi/4))+#size 2 and rotate 45 degrees
+  geom_polygon(aes(x=x, y=y), fill=NA, color=&amp;#39;black&amp;#39;)+
+  geom_polygon(aes(x=x2, y=y2), fill=NA, color=&amp;#39;red&amp;#39;)+
+  coord_fixed()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;how-many-squares-we-want&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;How many squares we want?&lt;/h2&gt;
+&lt;p&gt;Schotter can be seen as a matrix of squares. A simple way to iterate through a matrix is to nest a loop inside a loop such that one loop goes through the rows and another through the columns.&lt;/p&gt;
+&lt;p&gt;The original Schotter has 12 columns and 24 rows (that I counted)&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n&amp;lt;-24*12
+df.list&amp;lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      temp&amp;lt;-square(x=i, y=j) #create a square at column i and row j
+      df.list[[n]]&amp;lt;-temp #save the data frame with the square n on a list
+      n&amp;lt;-n-1
+    }
+  }&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This chunk creates a data frame containing the &lt;strong&gt;x&lt;/strong&gt;, &lt;strong&gt;y&lt;/strong&gt;, &lt;strong&gt;x2&lt;/strong&gt; and &lt;strong&gt;y2&lt;/strong&gt; for 288 (24x12) squares, that we can plotted. To plot each square independently as we will need for later, we need to add a new &lt;em&gt;geom_polygon&lt;/em&gt; layer for each square to a ggplot object. We could have done this in the previous loops, but in the course of this mini project I have learned that you can pass a list to ggplot. So, we can iterate though our list of square data frames using lapply and add a &lt;em&gt;geom_polygon&lt;/em&gt; for each square (a bit slow on my friend).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&amp;#39;black&amp;#39;)}
+  )+
+  coord_fixed()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Now we have the grid of squares. At this point I have decided to deal with the unnecessary elements of the plot. I generated a theme function such that I can easily change the background color.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;theme_background&amp;lt;-function(color=&amp;#39;white&amp;#39;){
+  theme(axis.ticks = element_blank(), axis.text = element_blank(),
+        panel.background = element_blank(), panel.grid = element_blank(),
+        plot.background = element_rect(fill = color),
+        strip.background = element_rect(fill=color),strip.text = element_blank(),
+        axis.title = element_blank(), legend.position = &amp;#39;none&amp;#39;)
+}
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&amp;#39;black&amp;#39;)}
+  )+
+  coord_fixed()+
+  theme_background()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;generative-process&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Generative process&lt;/h2&gt;
+&lt;p&gt;Generative art is define by wikipedia as:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Generative art refers to art that in whole or in part has been created with the use of an autonomous system. An autonomous system in this context is generally one that is non-human and can independently determine features of an artwork that would otherwise require decisions made directly by the artist. &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;An easy way to give autonomy to our code is by introducing randomness. As we can appreciate from Schotter, both the position and the angle of the squares seems to be more random and move away from the ‘calm’ stage as we move through the rows. We will add this to our nested loops by generating a random displacement and rotation for each square that increases by row.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n&amp;lt;-24*12
+df.list&amp;lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      displace&amp;lt;-runif(1,-j,j) #a random number is generated from a uniform distribution with min=-j and max=j
+      rotate&amp;lt;-runif(1,-j,j) #random number to rotate the square
+      temp&amp;lt;-square(x=i+displace, y=j+displace, angle=rotate) #create a square at column i and row j displaced by displace
+      df.list[[n]]&amp;lt;-temp #save the data frame with the square n on a list
+      n&amp;lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&amp;#39;black&amp;#39;)}
+  )+
+  coord_fixed()+
+  theme_background()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Ups! Something isn’t quite right (although I like it!). I think is because &lt;em&gt;j&lt;/em&gt;, that controls how much displacement and rotation can be added get to be too big in respect to &lt;strong&gt;x&lt;/strong&gt; and &lt;strong&gt;y&lt;/strong&gt;. So, let’s control for that. For that I divided &lt;em&gt;j&lt;/em&gt; by 40 in the case of displace and by 100 in the case of rotate. I found these numbers by playing around. I also flipped y axis.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n&amp;lt;-24*12
+df.list&amp;lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      displace&amp;lt;-runif(1,-j/40,j/40) #a random number is generated from a uniform distribution with min=-j and max=j
+      rotate&amp;lt;-runif(1,-j/100,j/100) #random number to rotate the square
+      temp&amp;lt;-square(x=i+displace, y=j+displace, angle=rotate) #create a square at column i and row j displaced by displace
+      df.list[[n]]&amp;lt;-temp #save the data frame with the square n on a list
+      n&amp;lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&amp;#39;black&amp;#39;)}
+  )+
+  coord_fixed()+
+  theme_background()+
+  scale_y_reverse()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;And &lt;em&gt;voila&lt;/em&gt;! we have coded a generative algorithm to produce something like Schotter. Because the randomness, every time we run the code, the result will be different.&lt;/p&gt;
+&lt;p&gt;Now we wrap the code in a function so that we can easily change parameters&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Schotter&amp;lt;-function(ncol_s=12, nrow_s=24, control_dis=40, 
+                   control_rot=100, fill_s=NA, color_s=&amp;#39;black&amp;#39;, alpha_s=0.2, 
+                   back_color=&amp;#39;white&amp;#39;){
+n&amp;lt;-ncol_s*nrow_s
+df.list&amp;lt;-list()
+  for (j in 1:nrow_s){
+    for (i in 1:ncol_s){
+      displace&amp;lt;-runif(1,-j/control_dis,j/control_dis)
+      rotate&amp;lt;-runif(1,-j/control_rot,j/control_rot)
+      temp&amp;lt;-square(x=i+displace, y=j+displace, angle=rotate)
+      temp$s&amp;lt;-rep(n)
+      df.list[[n]]&amp;lt;-temp
+      n&amp;lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2),
+                 alpha=alpha_s, fill=fill_s, color=color_s)}
+  )+
+  theme_background(color = back_color)+
+  coord_fixed()+
+  scale_y_reverse()
+}  &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can now play!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Schotter()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Schotter(fill=&amp;#39;firebrick&amp;#39;, color=&amp;#39;orange&amp;#39;, nrow_s = 48, control_dis = 20)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/schotter/Schotter_files/figure-html/unnamed-chunk-13-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-end&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The End&lt;/h2&gt;
+&lt;p&gt;This is all for now. There are a few ways the code could be improved, but I am happy with the result and I have had fun and learned something new!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

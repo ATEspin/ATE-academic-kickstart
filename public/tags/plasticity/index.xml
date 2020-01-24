@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Plasticity | ATE</title>
+    <link>/tags/plasticity/</link>
+      <atom:link href="/tags/plasticity/index.xml" rel="self" type="application/rss+xml" />
+    <description>Plasticity</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Plasticity</title>
+      <link>/tags/plasticity/</link>
+    </image>
+    
+    <item>
+      <title>Single-session cortical electrical stimulation enhances the efficacy of rehabilitative motor training after spinal cord injury in rats</title>
+      <link>/publication/batty-single-session-2020/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>/publication/batty-single-session-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rehabilitative Training in Animal Models of Spinal Cord Injury</title>
+      <link>/publication/torres-espin-rehabilitative-2018/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-rehabilitative-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Activity dependent therapies modulate the spinal changes that motoneurons suffer after a peripheral nerve injury</title>
+      <link>/publication/arbat-plana-activity-2015/</link>
+      <pubDate>Thu, 01 Jan 2015 00:00:00 +0000</pubDate>
+      <guid>/publication/arbat-plana-activity-2015/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

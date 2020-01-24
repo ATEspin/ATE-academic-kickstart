@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Motor Activity | ATE</title>
+    <link>/tags/motor-activity/</link>
+      <atom:link href="/tags/motor-activity/index.xml" rel="self" type="application/rss+xml" />
+    <description>Motor Activity</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 01 May 2014 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Motor Activity</title>
+      <link>/tags/motor-activity/</link>
+    </image>
+    
+    <item>
+      <title>Bone marrow mesenchymal stromal cells and olfactory ensheathing cells transplantation after spinal cord injury--a morphological and functional comparison in rats</title>
+      <link>/publication/torres-espin-bone-2014/</link>
+      <pubDate>Thu, 01 May 2014 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-bone-2014/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Neuroprotection and axonal regeneration after lumbar ventral root avulsion by re-implantation and mesenchymal stem cells transplant combined therapy</title>
+      <link>/publication/torres-espin-neuroprotection-2013/</link>
+      <pubDate>Mon, 01 Apr 2013 00:00:00 +0000</pubDate>
+      <guid>/publication/torres-espin-neuroprotection-2013/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Functional involvement of the lumbar spinal cord after contusion to T8 spinal segment of the rat</title>
+      <link>/publication/garcia-alias-functional-2010/</link>
+      <pubDate>Fri, 01 Jan 2010 00:00:00 +0000</pubDate>
+      <guid>/publication/garcia-alias-functional-2010/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

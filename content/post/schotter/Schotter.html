@@ -1,0 +1,171 @@
+---
+title: "Reproducing Schotter in R"
+date: 2020-01-01T21:13:14-05:00
+output: 
+  blogdown::html_page:
+    inster-after: false
+categories: ["R"]
+tags: ["Schotter","aRt","Generative"]
+---
+
+
+
+<p>I have been captivated by creative coding and generative art for a while. After discovering some of the work by <a href="https://twitter.com/aschinchon">Antonio S.Chinchón</a> and his blog <a href="https://fronkonstin.com/">Fronkonstin</a> on using R and mathematics to create amazing art work, I decided to play around. <a href="http://www.medienkunstnetz.de/works/schotter/">Schotter</a> (1968) is a famous piece by <a href="https://en.wikipedia.org/wiki/Georg_Nees">Georg Nees</a>, a pioneer in computer graphics and probably one of the first creative coders.</p>
+<p><a href="http://www.medienkunstnetz.de/works/schotter/"><strong>CHECK THE ORIGINAL NOW</strong></a></p>
+<p>To pay tribute to Georg, I decided to implement a chunk of code that would reproduce Schotter using R. There are probably several ways to code this algorithm and I am sure several people have done this before. My goal was to see if my current R knowledge could be use to program Schotter without checking other implementations and learn something on the way.</p>
+<p>Here my thought process.</p>
+<div id="the-libraries" class="section level2">
+<h2>The libraries</h2>
+<p>Nowadays I use <a href="https://ggplot2.tidyverse.org/">ggplot2</a> for every visualization, so I decided to utilize its amazing graphical powers. I also used <a href="https://dplyr.tidyverse.org/">dplyr</a> although we could easily not use it here.</p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)</code></pre>
+</div>
+<div id="building-a-square" class="section level2">
+<h2>Building a square</h2>
+<p>The easiest way to build a square in ggplot2 is probably using <em>geom_rect</em>, however I did not find a way to rotate the geometry, so I decided to go for a polygon (<em>geom_polygon</em>) and control the position of the 4 vertices outside ggplot. For that I created the following function:</p>
+<pre class="r"><code>square&lt;-function(x0=1,y0=1, size=1, angle=0){
+  xor&lt;-x0+size/2 #X origin (center of the square)
+  yor&lt;-y0+size/2 #Y origin (center of the square)
+  
+  tibble(
+    x=c(x0,x0+size,x0+size,x0),
+    y=c(y0,y0,y0+size,y0+size)
+  )%&gt;%mutate(x2=(x-xor)*cos(angle)-(y-yor)*sin(angle)+xor, #For rotation
+             y2=(x-xor)*sin(angle)+(y-yor)*cos(angle)+yor) #for rotation
+}</code></pre>
+<p>Where <strong>x0</strong> and <strong>y0</strong> control the position of lower left (or other depending on the axis orientation) vertex, size the length of the sides and angle the amount of rotation from the original position. An <strong>x</strong> and <strong>y</strong> for each vertex is set as a template relative to <strong>x0</strong>, <strong>y0</strong> and size. In this way, we will be able to control the position of the square in the canvas. <strong>x2</strong> and <strong>y2</strong> are set as the rotated coordinates for <strong>x</strong> and <strong>y</strong>, respectively. Ultimately, we will use <strong>x2</strong> and <strong>y2</strong>, that will be equal to <strong>x</strong> and <strong>y</strong> if angle is 0. I decided to generate new columns for the rotations so I can plot both, the original x, y and the rotated (I confess I had to brush up my trigonometry and google a few things for this).</p>
+<pre class="r"><code>ggplot(square())+
+  geom_polygon(aes(x=x, y=y))+
+  coord_fixed()# just so that axis are equally spaced</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>We have our first square!! We can now play with fill and color</p>
+<pre class="r"><code>ggplot(square())+
+  geom_polygon(aes(x=x, y=y), fill=NA, color=&#39;black&#39;)+
+  coord_fixed()</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Let’s play with some parameters</p>
+<pre class="r"><code>ggplot(square(size=2,angle=pi/4))+#size 2 and rotate 45 degrees
+  geom_polygon(aes(x=x, y=y), fill=NA, color=&#39;black&#39;)+
+  geom_polygon(aes(x=x2, y=y2), fill=NA, color=&#39;red&#39;)+
+  coord_fixed()</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="how-many-squares-we-want" class="section level2">
+<h2>How many squares we want?</h2>
+<p>Schotter can be seen as a matrix of squares. A simple way to iterate through a matrix is to nest a loop inside a loop such that one loop goes through the rows and another through the columns.</p>
+<p>The original Schotter has 12 columns and 24 rows (that I counted)</p>
+<pre class="r"><code>n&lt;-24*12
+df.list&lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      temp&lt;-square(x=i, y=j) #create a square at column i and row j
+      df.list[[n]]&lt;-temp #save the data frame with the square n on a list
+      n&lt;-n-1
+    }
+  }</code></pre>
+<p>This chunk creates a data frame containing the <strong>x</strong>, <strong>y</strong>, <strong>x2</strong> and <strong>y2</strong> for 288 (24x12) squares, that we can plotted. To plot each square independently as we will need for later, we need to add a new <em>geom_polygon</em> layer for each square to a ggplot object. We could have done this in the previous loops, but in the course of this mini project I have learned that you can pass a list to ggplot. So, we can iterate though our list of square data frames using lapply and add a <em>geom_polygon</em> for each square (a bit slow on my friend).</p>
+<pre class="r"><code>ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&#39;black&#39;)}
+  )+
+  coord_fixed()</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Now we have the grid of squares. At this point I have decided to deal with the unnecessary elements of the plot. I generated a theme function such that I can easily change the background color.</p>
+<pre class="r"><code>theme_background&lt;-function(color=&#39;white&#39;){
+  theme(axis.ticks = element_blank(), axis.text = element_blank(),
+        panel.background = element_blank(), panel.grid = element_blank(),
+        plot.background = element_rect(fill = color),
+        strip.background = element_rect(fill=color),strip.text = element_blank(),
+        axis.title = element_blank(), legend.position = &#39;none&#39;)
+}
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&#39;black&#39;)}
+  )+
+  coord_fixed()+
+  theme_background()</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="generative-process" class="section level2">
+<h2>Generative process</h2>
+<p>Generative art is define by wikipedia as:</p>
+<pre><code>Generative art refers to art that in whole or in part has been created with the use of an autonomous system. An autonomous system in this context is generally one that is non-human and can independently determine features of an artwork that would otherwise require decisions made directly by the artist. </code></pre>
+<p>An easy way to give autonomy to our code is by introducing randomness. As we can appreciate from Schotter, both the position and the angle of the squares seems to be more random and move away from the ‘calm’ stage as we move through the rows. We will add this to our nested loops by generating a random displacement and rotation for each square that increases by row.</p>
+<pre class="r"><code>n&lt;-24*12
+df.list&lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      displace&lt;-runif(1,-j,j) #a random number is generated from a uniform distribution with min=-j and max=j
+      rotate&lt;-runif(1,-j,j) #random number to rotate the square
+      temp&lt;-square(x=i+displace, y=j+displace, angle=rotate) #create a square at column i and row j displaced by displace
+      df.list[[n]]&lt;-temp #save the data frame with the square n on a list
+      n&lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&#39;black&#39;)}
+  )+
+  coord_fixed()+
+  theme_background()</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Ups! Something isn’t quite right (although I like it!). I think is because <em>j</em>, that controls how much displacement and rotation can be added get to be too big in respect to <strong>x</strong> and <strong>y</strong>. So, let’s control for that. For that I divided <em>j</em> by 40 in the case of displace and by 100 in the case of rotate. I found these numbers by playing around. I also flipped y axis.</p>
+<pre class="r"><code>n&lt;-24*12
+df.list&lt;-list()
+  for (j in 1:24){ #iterate through the rows
+    for (i in 1:12){ #iterate through the columns
+      displace&lt;-runif(1,-j/40,j/40) #a random number is generated from a uniform distribution with min=-j and max=j
+      rotate&lt;-runif(1,-j/100,j/100) #random number to rotate the square
+      temp&lt;-square(x=i+displace, y=j+displace, angle=rotate) #create a square at column i and row j displaced by displace
+      df.list[[n]]&lt;-temp #save the data frame with the square n on a list
+      n&lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2), fill=NA, color=&#39;black&#39;)}
+  )+
+  coord_fixed()+
+  theme_background()+
+  scale_y_reverse()</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>And <em>voila</em>! we have coded a generative algorithm to produce something like Schotter. Because the randomness, every time we run the code, the result will be different.</p>
+<p>Now we wrap the code in a function so that we can easily change parameters</p>
+<pre class="r"><code>Schotter&lt;-function(ncol_s=12, nrow_s=24, control_dis=40, 
+                   control_rot=100, fill_s=NA, color_s=&#39;black&#39;, alpha_s=0.2, 
+                   back_color=&#39;white&#39;){
+n&lt;-ncol_s*nrow_s
+df.list&lt;-list()
+  for (j in 1:nrow_s){
+    for (i in 1:ncol_s){
+      displace&lt;-runif(1,-j/control_dis,j/control_dis)
+      rotate&lt;-runif(1,-j/control_rot,j/control_rot)
+      temp&lt;-square(x=i+displace, y=j+displace, angle=rotate)
+      temp$s&lt;-rep(n)
+      df.list[[n]]&lt;-temp
+      n&lt;-n-1
+    }
+  }
+
+ggplot() + 
+  lapply(df.list, function(square_data) {
+    geom_polygon(data = square_data, aes(x = x2, y = y2),
+                 alpha=alpha_s, fill=fill_s, color=color_s)}
+  )+
+  theme_background(color = back_color)+
+  coord_fixed()+
+  scale_y_reverse()
+}  </code></pre>
+<p>We can now play!</p>
+<pre class="r"><code>Schotter()</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code>Schotter(fill=&#39;firebrick&#39;, color=&#39;orange&#39;, nrow_s = 48, control_dis = 20)</code></pre>
+<p><img src="/post/schotter/Schotter_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="the-end" class="section level2">
+<h2>The End</h2>
+<p>This is all for now. There are a few ways the code could be improved, but I am happy with the result and I have had fun and learned something new!</p>
+</div>

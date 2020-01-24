@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Karen L. Madsen | ATE</title>
+    <link>/authors/karen-l.-madsen/</link>
+      <atom:link href="/authors/karen-l.-madsen/index.xml" rel="self" type="application/rss+xml" />
+    <description>Karen L. Madsen</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 01 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Karen L. Madsen</title>
+      <link>/authors/karen-l.-madsen/</link>
+    </image>
+    
+    <item>
+      <title>Fecal transplant prevents gut dysbiosis and anxiety-like behaviour after spinal cord injury in rats</title>
+      <link>/publication/schmidt-fecal-2020/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/publication/schmidt-fecal-2020/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

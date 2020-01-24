@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Zacnicte May | ATE</title>
+    <link>/authors/zacnicte-may/</link>
+      <atom:link href="/authors/zacnicte-may/index.xml" rel="self" type="application/rss+xml" />
+    <description>Zacnicte May</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 01 Sep 2017 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Zacnicte May</title>
+      <link>/authors/zacnicte-may/</link>
+    </image>
+    
+    <item>
+      <title>Cyclosporine-immunosuppression does not affect survival of transplanted skin-derived precursor Schwann cells in the injured rat spinal cord</title>
+      <link>/publication/may-cyclosporine-immunosuppression-2017/</link>
+      <pubDate>Fri, 01 Sep 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-cyclosporine-immunosuppression-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Following Spinal Cord Injury Transected Reticulospinal Tract Axons Develop New Collateral Inputs to Spinal Interneurons in Parallel with Locomotor Recovery</title>
+      <link>/publication/may-following-2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>/publication/may-following-2017/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pamela J. F. Raposo | ATE</title>
+    <link>/authors/pamela-j.-f.-raposo/</link>
+      <atom:link href="/authors/pamela-j.-f.-raposo/index.xml" rel="self" type="application/rss+xml" />
+    <description>Pamela J. F. Raposo</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 01 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Pamela J. F. Raposo</title>
+      <link>/authors/pamela-j.-f.-raposo/</link>
+    </image>
+    
+    <item>
+      <title>Fecal transplant prevents gut dysbiosis and anxiety-like behaviour after spinal cord injury in rats</title>
+      <link>/publication/schmidt-fecal-2020/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>/publication/schmidt-fecal-2020/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

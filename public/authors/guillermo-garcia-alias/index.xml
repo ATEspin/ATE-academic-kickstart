@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Guillermo García-Alías | ATE</title>
+    <link>/authors/guillermo-garcia-alias/</link>
+      <atom:link href="/authors/guillermo-garcia-alias/index.xml" rel="self" type="application/rss+xml" />
+    <description>Guillermo García-Alías</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 01 Mar 2013 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Guillermo García-Alías</title>
+      <link>/authors/guillermo-garcia-alias/</link>
+    </image>
+    
+    <item>
+      <title>Quantitative assessment of locomotion and interlimb coordination in rats after different spinal cord injuries</title>
+      <link>/publication/redondo-castro-quantitative-2013/</link>
+      <pubDate>Fri, 01 Mar 2013 00:00:00 +0000</pubDate>
+      <guid>/publication/redondo-castro-quantitative-2013/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Functional involvement of the lumbar spinal cord after contusion to T8 spinal segment of the rat</title>
+      <link>/publication/garcia-alias-functional-2010/</link>
+      <pubDate>Fri, 01 Jan 2010 00:00:00 +0000</pubDate>
+      <guid>/publication/garcia-alias-functional-2010/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

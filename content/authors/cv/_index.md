@@ -6,8 +6,9 @@ email: ""
 name: My Research
 interests:
   - Neuroinformatics
+  - Neurotrauma
   - Data Sharing
-  - Data reuse
+  - Data Reuse
   - Analytics
   - R
 

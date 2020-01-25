@@ -5,7 +5,7 @@ bio:
 email: ""
 name: My Research
 interests:
-  - Neurotrauma
+  - Neuroinformatics
   - Data Sharing
   - Data reuse
   - Analytics
